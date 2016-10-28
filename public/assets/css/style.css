@@ -5,14 +5,33 @@ html {
 body {
   padding-top: 20px;
   padding-bottom: 60px;
+  background: #83a4d4; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to left, #83a4d4 , #b6fbff); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to left, #83a4d4 , #b6fbff); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  font-family: "Helvetica Neue-Light", Helvetica, Arial, sans-serif;
 }
+
+h3 {
+  font-weight: 300;
+}
+
 .container {
   margin: 0 auto;
   max-width: 1000px;
 }
 .container > hr {
-  margin: 60px 0;
+  margin: 50px 0 10px 0;
+  border-top: 1px solid rgba(238, 238, 238, 0.29);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
 }
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  right: 10%;
+  font-weight: 300;
+}
+
 .placeholder {
   min-height: 533px;
   position: relative
@@ -30,8 +49,9 @@ body {
   text-align: center;
 }
 .jumbotron h1 {
-  font-size: 100px;
+  font-size: 90px;
   line-height: 1;
+  font-weight: 300;
 }
 .jumbotron .lead {
   font-size: 24px;
@@ -49,23 +69,40 @@ body {
 }
 .navbar .navbar-inner {
   padding: 0;
+  background: transparent;
+  border: none;
+  -webkit-box-shadow: none;
+
 }
 .navbar .nav {
   margin: 0;
   display: table;
   width: 100%;
 }
+
+.navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus {
+  color: #5C80BC;
+  text-decoration: none;
+  background-color: transparent; 
+  -webkit-box-shadow: none; 
+  -moz-box-shadow: none;
+  box-shadow: none; 
+}
+
 .navbar .nav li {
   display: table-cell;
   width: 1%;
   float: none;
 }
 .navbar .nav li a {
-  font-weight: bold;
+  font-weight: 400;
   text-align: center;
   border-left: 1px solid rgba(255,255,255,.75);
   border-right: 1px solid rgba(0,0,0,.1);
+  text-shadow: none;
+  color: rgba(255, 255, 255, 0.6);
 }
+
 .navbar .nav li:first-child a {
   border-left: 0;
   border-radius: 3px 0 0 3px;
