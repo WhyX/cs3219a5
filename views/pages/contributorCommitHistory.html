@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      .header {
+        padding-left: 20px;
+      }
+    </style>
+
+    <title>Commit History of Contributor</title>
+    <meta charset="utf-8">
+    <meta name="description" content="{{seo.contact.description}}">
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="assets/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <div class="header">
+      <h1>Commit History of Contributor</h1>
+    </div>
+
+    <script>
+      var url = 'https://api.github.com/repos/';
+      var owner = 'tungnk1993/';
+      var repo = 'scrapy/';
+      var author = 'redapple';
+      var prefix = 'commits?per_page=100&author='.concat(author);
+      var url = url.concat(owner).concat(repo).concat(prefix);
+      var commits = [];
+
+      $.get(url, function(data, status) {
+        var processedData = preProcess(data);
+
+        createTable(processedData);
+        // var promises = [];
+
+        // for(var i = 0; i < data.length; i++) {
+        //   var branch = data[i].name;
+        //   var tempPrefix = 'commits?per_page=100&author='.concat(author).concat('&sha=').concat(branch);
+        //   var tempUrl = 'https://api.github.com/repos/'.concat(owner).concat(repo).concat(tempPrefix);
+        //   promises.push($.get(tempUrl, function(data,status) {
+        //     if(data.length > 0) {
+        //       commits.push(data);
+        //     }
+        //   }));
+        // }
+
+        // $.when.apply($, promises).then(function(){
+        //   console.log(commits);
+        // }, function() {
+        //   console.log('error occured');
+        // })
+      });
+
+      var preProcess = function(data) {
+        console.log(data);
+        var processedData = {};
+
+        for(var i = data.length - 1; i >= 0; i--) {
+          var dateTime = data[i].commit.committer.date;
+          dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
+          var date = dateTime[0];
+          var time = dateTime[1];
+          var message = data[i].commit.message;
+          var image_url = data[i].author.avatar_url;
+
+          var commit = {};
+          commit["time"] = time;
+          commit["message"] = message;
+          commit["image_url"] = image_url;
+
+          if(processedData[date] != null) {
+            processedData[date].push(commit);
+          } else {
+            var newDate = [commit];
+            processedData[date] = newDate;
+          }
+        }
+
+        return processedData;
+      }
+
+      var createTable = function(data) {
+        console.log(data);
+
+        var keys = Object.keys(data), dataLen = keys.length;
+        document.body.innerHTML += '<table id="commitHistory">'.concat('</table>');
+        var table = document.getElementById("commitHistory");
+        var rowIndex = 0;
+
+        for (var i = dataLen - 1; i >= 0; i --) {
+          var date = keys[i];
+          var commits = data[date];
+          var headerRow = table.insertRow(rowIndex);
+          var headerCell = headerRow.insertCell(0);
+
+          headerCell.innerHTML = "<b>".concat(date).concat("</b>");
+          rowIndex++;
+
+          for(var j = 0; j < commits.length; j++) {
+            var time = commits[j].time;
+            var message = commits[j].message;
+
+            var row = table.insertRow(rowIndex);
+            var timeCell = row.insertCell(0);
+            var messageCell = row.insertCell(1);
+
+            timeCell.innerHTML = time;
+            messageCell.innerHTML = message;
+            rowIndex++;
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
