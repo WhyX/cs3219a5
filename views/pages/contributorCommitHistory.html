@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <style>
+      span {
+        display: inline-block;
+        vertical-align: middle;
+        line-height: normal;
+      }
+
       .header {
         padding-left: 20px;
       }
@@ -11,29 +17,39 @@
         border-spacing: 1px;
       }
 
+      .dateCell {
+        height: 30px;
+        display: inline-block;
+        font-size: 15px;
+        line-height: 30px;
+        padding: 5px 8px 5px 8px;
+        border-radius: 5px;
+        color: white;
+      }
+
       .timelineCell {
         width: 3px;
-        height: 40px;
+        height: 50px;
         display: inline-block;
         margin-right: 7px;
       }
 
       .timeCell {
-        height: 40px;
         display: inline-block;
-        left: 50%;
-        top: 50%;
-        vertical-align: middle;
+        vertical-align: top;
+        text-align: center;
+        line-height: 40px;
+        overflow: hidden;
+        padding: 0px 7px 0px 7px;
       }
 
       .messageCell {
-        height: 40px;
         display: inline-block;
         margin-left: 10px;
-        vertical-align: middle;
+        vertical-align: top;
+        line-height: 40px;
+        overflow: hidden;
       }
-
-
     </style>
 
     <title>Commit History of Contributor</title>
@@ -131,7 +147,7 @@
           var headerCell = headerRow.insertCell(0);
           var randomColor = randomColorGenerator();
 
-          headerCell.innerHTML = "<b>".concat(date).concat("</b>");
+          headerCell.innerHTML = "<div class='dateCell' style='background:".concat(randomColor).concat("'><span>").concat(date).concat("</span></div>");
           rowIndex++;
 
           for(var j = 0; j < commits.length; j++) {
@@ -140,7 +156,7 @@
             var row = table.insertRow(rowIndex);
             var dataCell = row.insertCell(0);
 
-            dataCell.innerHTML = "<div class='timelineCell' style='background:".concat(randomColor).concat("'></div><div class='timeCell'>").concat(time).concat("</div><div class='messageCell'>").concat(message).concat("</div>");
+            dataCell.innerHTML = "<div class='timelineCell' style='background:".concat(randomColor).concat("'></div><div class='timeCell'><span>").concat(time).concat("</span></div><div class='messageCell'><span>").concat(message).concat("</span></div>");
             rowIndex++;
           }
         }
