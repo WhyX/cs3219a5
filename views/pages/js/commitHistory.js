@@ -13,7 +13,7 @@ function createCommitHistoryTable(data) {
   console.log(data);
 
   var keys = Object.keys(data), dataLen = keys.length;
-  document.body.innerHTML += '<table id="commitHistoryTable" cellspacing="0">'.concat('</table>');
+  document.body.innerHTML += '<table id="commitHistoryTable">'.concat('</table>');
   var table = document.getElementById("commitHistoryTable");
   var rowIndex = 0;
 
