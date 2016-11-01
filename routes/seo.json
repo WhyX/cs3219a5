@@ -17,10 +17,10 @@
         "description": "",
         "body_class": "commitHistory"
     },
-    "downloads": {
-        "title": "Downloads - Express Boilerplate",
+    "effort": {
+        "title": "Effort",
         "description": "",
-        "body_class": "downloads"
+        "body_class": "effort"
     },
     "about": {
         "title": "About - Express Boilerplate",

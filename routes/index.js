@@ -11,8 +11,8 @@ exports.router = {
     commithistory: function(req, res) {
         res.render('commithistory', { seo : seo });
     },
-    downloads: function(req, res) {
-        res.render('downloads', { seo : seo });
+    effort: function(req, res) {
+        res.render('effort', { seo : seo });
     },
     about: function(req, res) {
         res.render('about', { seo : seo });

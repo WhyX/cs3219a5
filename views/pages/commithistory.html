@@ -3,7 +3,7 @@
 <head>
   <title>{{seo.commithistory.title}}</title>
   <meta charset="utf-8">
-  <meta name="description" content="{{seo.services.description}}">
+  <meta name="description" content="{{seo.commithistory.description}}">
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="assets/css/commitHistory.css">
@@ -17,7 +17,7 @@
       <![endif]-->
     </head>
 
-    <body class="{{seo.services.body_class}}">
+    <body class="{{seo.commithistory.body_class}}">
 
       <div class="container">
 
@@ -27,50 +27,56 @@
           {{> commithistory }}
         </div>
 
+        <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+          <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
+          <button id="submit-btn" type="button" class="btn btn-primary" style="margin-bottom: 10px;text-transform: uppercase;">
+            Submit
+          </button>
+        </div>
 
-          <script>
-          var url = 'https://api.github.com/repos/';
-          var owner = 'tungnk1993/';
-          var repo = 'scrapy/';
-          var author = 'redapple';
-          var prefix = 'commits?per_page=100&author='.concat(author);
-          var url = url.concat(owner).concat(repo).concat(prefix);
-          var commits = [];
+        <script>
+        var url = 'https://api.github.com/repos/';
+        var owner = 'tungnk1993/';
+        var repo = 'scrapy/';
+        var author = 'redapple';
+        var prefix = 'commits?per_page=100&author='.concat(author);
+        var url = url.concat(owner).concat(repo).concat(prefix);
+        var commits = [];
 
-          $.get(url, function(data, status) {
-            var processedData = preProcess(data);
+        $.get(url, function(data, status) {
+          var processedData = preProcess(data);
 
-            createCommitHistoryTable(processedData);
-          });
+          createCommitHistoryTable(processedData);
+        });
 
-          var preProcess = function(data) {
-            console.log(data);
-            var processedData = {};
+        var preProcess = function(data) {
+          console.log(data);
+          var processedData = {};
 
-            for(var i = data.length - 1; i >= 0; i--) {
-              var dateTime = data[i].commit.committer.date;
-              dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
-              var date = dateTime[0];
-              var time = dateTime[1];
-              var message = data[i].commit.message;
-              var image_url = data[i].author.avatar_url;
+          for(var i = data.length - 1; i >= 0; i--) {
+            var dateTime = data[i].commit.committer.date;
+            dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
+            var date = dateTime[0];
+            var time = dateTime[1];
+            var message = data[i].commit.message;
+            var image_url = data[i].author.avatar_url;
 
-              var commit = {};
-              commit["time"] = time;
-              commit["message"] = message;
-              commit["image_url"] = image_url;
+            var commit = {};
+            commit["time"] = time;
+            commit["message"] = message;
+            commit["image_url"] = image_url;
 
-              if(processedData[date] != null) {
-                processedData[date].push(commit);
-              } else {
-                var newDate = [commit];
-                processedData[date] = newDate;
-              }
+            if(processedData[date] != null) {
+              processedData[date].push(commit);
+            } else {
+              var newDate = [commit];
+              processedData[date] = newDate;
             }
-
-            return processedData;
           }
-          </script>
+
+          return processedData;
+        }
+        </script>
 
       </body>
       </html>

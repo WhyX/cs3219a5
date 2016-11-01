@@ -36,7 +36,7 @@ route.get('/index.html', function(req, res){
 route.get('/', router.index);
 route.get('/contributions.html', router.contributions);
 route.get('/commithistory.html', router.commithistory);
-route.get('/downloads.html', router.downloads);
+route.get('/effort.html', router.effort);
 route.get('/about.html', router.about);
 route.get('/contact.html', router.contact);
 
