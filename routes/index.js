@@ -14,8 +14,8 @@ exports.router = {
     effort: function(req, res) {
         res.render('effort', { seo : seo });
     },
-    about: function(req, res) {
-        res.render('about', { seo : seo });
+    loc: function(req, res) {
+        res.render('loc', { seo : seo });
     },
     contact: function(req, res) {
         res.render('contact', { seo : seo });

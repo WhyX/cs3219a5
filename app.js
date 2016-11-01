@@ -37,7 +37,7 @@ route.get('/', router.index);
 route.get('/contributions.html', router.contributions);
 route.get('/commithistory.html', router.commithistory);
 route.get('/effort.html', router.effort);
-route.get('/about.html', router.about);
+route.get('/loc.html', router.loc);
 route.get('/contact.html', router.contact);
 
 app.use('/', route);

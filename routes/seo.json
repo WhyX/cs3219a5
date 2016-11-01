@@ -22,10 +22,10 @@
         "description": "",
         "body_class": "effort"
     },
-    "about": {
-        "title": "About - Express Boilerplate",
+    "loc": {
+        "title": "Lines of Code",
         "description": "",
-        "body_class": "about"
+        "body_class": "loc"
     },
     "contact": {
         "title": "Contact - Express Boilerplate",
