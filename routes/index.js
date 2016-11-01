@@ -8,8 +8,8 @@ exports.router = {
     contributions: function(req, res) {
         res.render('contributions', { seo : seo });
     },
-    services: function(req, res) {
-        res.render('services', { seo : seo });
+    commithistory: function(req, res) {
+        res.render('commithistory', { seo : seo });
     },
     downloads: function(req, res) {
         res.render('downloads', { seo : seo });

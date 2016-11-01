@@ -3,8 +3,8 @@ function randomColorGenerator() {
 
   return $.Color({
     hue: hue,
-    saturation: 0.9,
-    lightness: 0.6,
+    saturation: 0.5,
+    lightness: 0.7,
     alpha: 1
   }).toHexString();
 }

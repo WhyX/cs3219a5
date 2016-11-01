@@ -9,8 +9,9 @@ span {
 }
 
 #commitHistoryTable {
-  font-family: "Ubuntu";
+  font-family: "HelveticaNeue-Light";
   border-spacing: 1px;
+  margin-left: 40px;
 }
 
 .dateCell {
@@ -19,7 +20,6 @@ span {
   font-size: 15px;
   line-height: 30px;
   padding: 5px 8px 5px 8px;
-  border-radius: 5px;
   color: white;
 }
 

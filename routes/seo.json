@@ -1,21 +1,21 @@
 {
     "default": {
-        "title": "Express Boilerplate"
+        "title": "GitGet"
     },
     "index": {
-        "title": "Home - Express Boilerplate",
+        "title": "Home",
         "description": "",
         "body_class": "home"
     },
     "contributions": {
-        "title": "Contributions - Express Boilerplate",
+        "title": "Contributions",
         "description": "",
         "body_class": "contributions"
     },
-    "services": {
-        "title": "Services - Express Boilerplate",
+    "commitHistory": {
+        "title": "Commit History",
         "description": "",
-        "body_class": "services"
+        "body_class": "commitHistory"
     },
     "downloads": {
         "title": "Downloads - Express Boilerplate",
