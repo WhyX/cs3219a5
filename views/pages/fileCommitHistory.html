@@ -10,8 +10,14 @@
     <title>Commit History of File</title>
     <meta charset="utf-8">
     <meta name="description" content="{{seo.contact.description}}">
+
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
+    <link rel="stylesheet" type="text/css" href="css/commitHistory.css">
+
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/jquery.color-2.1.2.min.js"></script>
+    <script src="js/commitHistory.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
@@ -36,7 +42,7 @@
         console.log(data);
         var processedData = preProcess(data);
 
-        createTable(processedData);
+        createCommitHistoryTable(processedData);
         // var promises = [];
 
         // for(var i = 0; i < data.length; i++) {
@@ -80,38 +86,6 @@
         }
 
         return processedData;
-      }
-
-      var createTable = function(data) {
-        console.log(data);
-
-        var keys = Object.keys(data), dataLen = keys.length;
-        document.body.innerHTML += '<table id="commitHistory">'.concat('</table>');
-        var table = document.getElementById("commitHistory");
-        var rowIndex = 0;
-
-        for (var i = dataLen - 1; i >= 0; i --) {
-          var date = keys[i];
-          var commits = data[date];
-          var headerRow = table.insertRow(rowIndex);
-          var headerCell = headerRow.insertCell(0);
-
-          headerCell.innerHTML = "<b>".concat(date).concat("</b>");
-          rowIndex++;
-
-          for(var j = 0; j < commits.length; j++) {
-            var time = commits[j].time;
-            var message = commits[j].message;
-
-            var row = table.insertRow(rowIndex);
-            var timeCell = row.insertCell(0);
-            var messageCell = row.insertCell(1);
-
-            timeCell.innerHTML = time;
-            messageCell.innerHTML = message;
-            rowIndex++;
-          }
-        }
       }
     </script>
   </body>
