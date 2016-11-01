@@ -39,6 +39,7 @@ route.get('/commithistory.html', router.commithistory);
 route.get('/effort.html', router.effort);
 route.get('/loc.html', router.loc);
 route.get('/activerate.html', router.activerate);
+route.get('/subscribe.html', router.subscribe);
 
 app.use('/', route);
 

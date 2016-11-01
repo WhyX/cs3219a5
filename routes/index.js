@@ -19,5 +19,8 @@ exports.router = {
     },
     activerate: function(req, res) {
         res.render('activerate', { seo : seo });
+    },
+    subscribe: function(req, res) {
+        res.render('subscribe', { seo : seo });
     }
 };

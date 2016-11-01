@@ -32,6 +32,11 @@
         "description": "",
         "body_class": "activerate"
     },
+    "subscribe": {
+        "title": "Subscribe",
+        "description": "",
+        "body_class": "subscribe"
+    },
     "notFound": {
         "title": "404 Error",
         "description": "",
