@@ -5,8 +5,8 @@ exports.router = {
     index: function(req, res) {
         res.render('index', { seo : seo });
     },
-    projects: function(req, res) {
-        res.render('projects', { seo : seo });
+    contributions: function(req, res) {
+        res.render('contributions', { seo : seo });
     },
     services: function(req, res) {
         res.render('services', { seo : seo });

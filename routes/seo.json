@@ -7,10 +7,10 @@
         "description": "",
         "body_class": "home"
     },
-    "projects": {
-        "title": "Projects - Express Boilerplate",
+    "contributions": {
+        "title": "Contributions - Express Boilerplate",
         "description": "",
-        "body_class": "projects"
+        "body_class": "contributions"
     },
     "services": {
         "title": "Services - Express Boilerplate",
