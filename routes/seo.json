@@ -27,18 +27,18 @@
         "description": "",
         "body_class": "loc"
     },
-    "contact": {
-        "title": "Contact - Express Boilerplate",
+    "activerate": {
+        "title": "Active Rate",
         "description": "",
-        "body_class": "contact"
+        "body_class": "activerate"
     },
     "notFound": {
-        "title": "404 Error - Express Boilerplate",
+        "title": "404 Error",
         "description": "",
         "body_class": "error"
     },
     "serverError": {
-        "title": "500 Error - Express Boilerplate",
+        "title": "500 Error",
         "description": "",
         "body_class": "error"
     }

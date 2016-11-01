@@ -17,7 +17,7 @@ exports.router = {
     loc: function(req, res) {
         res.render('loc', { seo : seo });
     },
-    contact: function(req, res) {
-        res.render('contact', { seo : seo });
+    activerate: function(req, res) {
+        res.render('activerate', { seo : seo });
     }
 };

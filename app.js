@@ -38,7 +38,7 @@ route.get('/contributions.html', router.contributions);
 route.get('/commithistory.html', router.commithistory);
 route.get('/effort.html', router.effort);
 route.get('/loc.html', router.loc);
-route.get('/contact.html', router.contact);
+route.get('/activerate.html', router.activerate);
 
 app.use('/', route);
 
