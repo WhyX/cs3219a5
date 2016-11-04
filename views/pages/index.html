@@ -12,18 +12,28 @@
 
   </head>
 
-  <body class="{{seo.index.body_class}}" style="display:flex; ">
+  <body class="{{seo.index.body_class}}" style="display:flex; font-family:Ubuntu">
 
     <div class="container" >
 
       {{> home }}
 
-      <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-        <input type="text" class="form-control" placeholder="Github Repo URL" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
-        <button id="submit-btn" type="button" class="btn btn-primary" style="margin-bottom: 10px;text-transform: uppercase;">
-        Submit
-        </button>
+       <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;margin-top:100px;">
+        <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1" id="email-inputbar" style="margin-right: 10px; font-family:Ubuntu">
+        
       </div>
+
+      <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+        <input type="text" class="form-control" placeholder="Github Repo URL" aria-describedby="basic-addon1" id="github-inputbar" style="margin-right: 10px; font-family:Ubuntu">
+      </div>
+
+      <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+        <button id="submit-btn-email" type="button" class="btn btn-primary" style="margin-bottom: 10px;text-transform: uppercase; font-family:Ubuntu">
+        Submit
+      </button>
+      </div>
+
+      
 
       {{> head }}
 
@@ -35,6 +45,25 @@
   <script type="text/javascript">
     $('#submit-btn').on('click', function() {
       console.log($('#user-inputbar').val());
+    });
+
+    var val = window.location.search;
+    $('.nav').find('a').each(function() {
+      var $this = $(this);
+      var _href = $this.attr("href");
+      $this.attr("href", _href + val);
+      console.log($this.attr("href"));
+    });
+
+    $('#submit-btn-email').on('click', function() {
+      var val = '?email='+ $('#email-inputbar').val() +  "&github=" + $('#github-inputbar').val();
+      window.location.search = val;
+      $('.nav').find('a').each(function() {
+        var $this = $(this);
+        var _href = $this.attr("href");
+        $this.attr("href", _href + val);
+        console.log($this.attr("href"));
+      });
     });
   </script>
 </html>

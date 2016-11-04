@@ -35,7 +35,7 @@
           </div>
 
           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-            <input type="text" class="form-control" placeholder="File" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
+            <input type="text" class="form-control" placeholder="File" aria-describedby="basic-addon1" id="user-filebar" style="margin-right: 10px;">
           </div>
 
           <div style="display:flex;justify-content: center;">
@@ -44,6 +44,16 @@
           </button>
         </div>
       </div>
+
+       <script type="text/javascript">
+        var val = window.location.search;
+        $('.nav').find('a').each(function() {
+          var $this = $(this);
+          var _href = $this.attr("href");
+          $this.attr("href", _href + val);
+          console.log($this.attr("href"));
+        });
+      </script>
 
       <script>
       var url = 'https://api.github.com/repos/';

@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -28,5 +29,14 @@
 
       {{> footer }}
 
+      <script type="text/javascript">
+        var val = window.location.search;
+        $('.nav').find('a').each(function() {
+          var $this = $(this);
+          var _href = $this.attr("href");
+          $this.attr("href", _href + val);
+          console.log($this.attr("href"));
+        });
+      </script>
   </body>
 </html>
