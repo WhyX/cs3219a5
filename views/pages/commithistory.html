@@ -56,48 +56,43 @@
       </script>
 
       <script>
-      var url = 'https://api.github.com/repos/';
-      var owner = 'tungnk1993/';
-      var repo = 'scrapy/';
-      var author = 'redapple';
-      var prefix = 'commits?per_page=100&author='.concat(author);
-      var url = url.concat(owner).concat(repo).concat(prefix);
-      var commits = [];
+        var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner=tungnk1993&repo=scrapy&author=pablohoffman&start=2011-04-14T16:00:49Z&end=2016-11-02T17:31:06.573Z';
+        var commits = [];
 
-      $.get(url, function(data, status) {
-        var processedData = preProcess(data);
+        $.get(url, function(data, status) {
+          console.log(data);
+          var processedData = preProcess(data);
 
-        createCommitHistoryTable(processedData);
-      });
+          createCommitHistoryTable(processedData);
+        });
 
-      var preProcess = function(data) {
-        console.log(data);
-        var processedData = {};
+        var preProcess = function(data) {
+          console.log(data);
+          var processedData = {};
 
-        for(var i = data.length - 1; i >= 0; i--) {
-          var dateTime = data[i].commit.committer.date;
-          dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
-          var date = dateTime[0];
-          var time = dateTime[1];
-          var message = data[i].commit.message;
-          var image_url = data[i].author.avatar_url;
+          for(var i = data.length - 1; i >= 0; i--) {
+            var dateTime = data[i].commit_date;
+            dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
+            var date = dateTime[0];
+            var time = dateTime[1];
+            var message = data[i].commit_message;
+            var image_url = data[i].author_avatar_url;
 
-          var commit = {};
-          commit["time"] = time;
-          commit["message"] = message;
-          commit["image_url"] = image_url;
+            var commit = {};
+            commit["time"] = time;
+            commit["message"] = message;
+            commit["image_url"] = image_url;
 
-          if(processedData[date] != null) {
-            processedData[date].push(commit);
-          } else {
-            var newDate = [commit];
-            processedData[date] = newDate;
+            if(processedData[date] != null) {
+              processedData[date].push(commit);
+            } else {
+              var newDate = [commit];
+              processedData[date] = newDate;
+            }
           }
-        }
-
         return processedData;
       }
-      </script>
+    </script>
 
     </body>
     </html>
