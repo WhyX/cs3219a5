@@ -3,6 +3,7 @@
 <head>
   <title>{{seo.commithistory.title}}</title>
   <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
   <meta name="description" content="{{seo.commithistory.description}}">
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
@@ -10,6 +11,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="assets/js/commitHistory.js"></script>
   <script src="assets/js/jquery.color-2.1.2.min.js"></script>
+
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -28,64 +30,64 @@
         </div>
 
         <div>
-        <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-          <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
-        </div>
+          <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+            <input type="text" class="form-control" placeholder="Username" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
+          </div>
 
-         <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-          <input type="text" class="form-control" placeholder="File" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
-        </div>
+          <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+            <input type="text" class="form-control" placeholder="File" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
+          </div>
 
-        <div style="display:flex;justify-content: center;">
-         <button id="submit-btn" type="button" class="btn btn-primary" style="display:flex;justify-content: center;margin-bottom: 10px;text-transform: uppercase;">
+          <div style="display:flex;justify-content: center;">
+           <button id="submit-btn" type="button" class="btn btn-primary" style="display:flex;justify-content: center;margin-bottom: 10px;text-transform: uppercase;">
             Submit
           </button>
         </div>
       </div>
 
-        <script>
-        var url = 'https://api.github.com/repos/';
-        var owner = 'tungnk1993/';
-        var repo = 'scrapy/';
-        var author = 'redapple';
-        var prefix = 'commits?per_page=100&author='.concat(author);
-        var url = url.concat(owner).concat(repo).concat(prefix);
-        var commits = [];
+      <script>
+      var url = 'https://api.github.com/repos/';
+      var owner = 'tungnk1993/';
+      var repo = 'scrapy/';
+      var author = 'redapple';
+      var prefix = 'commits?per_page=100&author='.concat(author);
+      var url = url.concat(owner).concat(repo).concat(prefix);
+      var commits = [];
 
-        $.get(url, function(data, status) {
-          var processedData = preProcess(data);
+      $.get(url, function(data, status) {
+        var processedData = preProcess(data);
 
-          createCommitHistoryTable(processedData);
-        });
+        createCommitHistoryTable(processedData);
+      });
 
-        var preProcess = function(data) {
-          console.log(data);
-          var processedData = {};
+      var preProcess = function(data) {
+        console.log(data);
+        var processedData = {};
 
-          for(var i = data.length - 1; i >= 0; i--) {
-            var dateTime = data[i].commit.committer.date;
-            dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
-            var date = dateTime[0];
-            var time = dateTime[1];
-            var message = data[i].commit.message;
-            var image_url = data[i].author.avatar_url;
+        for(var i = data.length - 1; i >= 0; i--) {
+          var dateTime = data[i].commit.committer.date;
+          dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
+          var date = dateTime[0];
+          var time = dateTime[1];
+          var message = data[i].commit.message;
+          var image_url = data[i].author.avatar_url;
 
-            var commit = {};
-            commit["time"] = time;
-            commit["message"] = message;
-            commit["image_url"] = image_url;
+          var commit = {};
+          commit["time"] = time;
+          commit["message"] = message;
+          commit["image_url"] = image_url;
 
-            if(processedData[date] != null) {
-              processedData[date].push(commit);
-            } else {
-              var newDate = [commit];
-              processedData[date] = newDate;
-            }
+          if(processedData[date] != null) {
+            processedData[date].push(commit);
+          } else {
+            var newDate = [commit];
+            processedData[date] = newDate;
           }
-
-          return processedData;
         }
-        </script>
 
-      </body>
-      </html>
+        return processedData;
+      }
+      </script>
+
+    </body>
+    </html>
