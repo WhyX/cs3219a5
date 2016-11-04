@@ -34,7 +34,7 @@ route.get('/index.html', function(req, res){
     res.redirect(301, '/');
 });
 route.get('/', router.index);
-route.get('/contributions.html', router.contributions);
+route.get('/contributions', router.contributions);
 route.get('/commithistory.html', router.commithistory);
 route.get('/effort.html', router.effort);
 route.get('/loc.html', router.loc);

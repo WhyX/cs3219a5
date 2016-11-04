@@ -59,6 +59,16 @@
                 $('#my-select').multiSelect();
         </script>
 
+         <script type="text/javascript">
+        var val = window.location.search;
+        $('.nav').find('a').each(function() {
+          var $this = $(this);
+          var _href = $this.attr("href");
+          $this.attr("href", _href + val);
+          console.log($this.attr("href"));
+        });
+      </script>
+
         <script>
 
 
