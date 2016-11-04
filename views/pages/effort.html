@@ -13,18 +13,47 @@
       <script src="assets/js/html5shiv.js"></script>
       <![endif]-->
       <style>
-      .arc text {
-        font: 15px sans-serif;
-        text-anchor: middle;
-      }
+        .arc text {
+          font: 15px sans-serif;
+          text-anchor: middle;
+        }
 
-      .arc path {
-        stroke: #fff;
-      }
+        .arc path {
+          stroke: #fff;
+          cursor: pointer;
+        }
 
-      .header {
-        padding-left: 20px;
-      }
+        .arc path:hover {
+          fill: black;
+          stroke: #a9a9a9;
+          opacity: 0.2;
+        }
+
+        .header {
+          padding-left: 20px;
+        }
+
+        .contributionChart {
+          height: auto;
+          width: 100%;
+        }
+
+        #tooltip {
+          position: absolute;
+          font-weight: bold;
+          padding: 12px;
+          background-color: white;
+          -webkit-border-radius: 3px;
+          -moz-border-radius: 3px;
+          border-radius: 3px;
+          -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+          -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
+          box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
+        }
+
+        #tooltip.hidden {
+          opacity: 0;
+        }
       </style>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -39,7 +68,7 @@
         <div class="placeholder">
           {{> effort }}
         </div>
-          
+
         <h4 style="display: flex;justify-content: center;">Select Members to Compare:</h4>
         <div style="display: flex;justify-content: center;">
           <select multiple="multiple" id="my-select" name="my-select">
@@ -54,82 +83,77 @@
         <script src="assets/js/jquery.multi-select.js"></script>
 
         <script type="text/javascript">
-                $('#my-select').multiSelect();
+          $('#my-select').multiSelect();
         </script>
 
+        <div class="contributionChart" style="margin-top: 50px"></div>
+        <div id="tooltip" class="hidden">
+        </div>
         <script>
+          var url = "https://api.github.com/repos/tungnk1993/scrapy/stats/contributors";
+          var targetContributors = {"pablohoffman": "pablohoffman", "dangra": "dangra", "curita": "curita"};
 
+          $.get(url, function(data, status) {
+            console.log(data);
+            var processedData = preProcess(data);
 
-        var url = "https://api.github.com/repos/tungnk1993/scrapy/stats/contributors";
-        var targetContributors = {"pablohoffman": "pablohoffman", "dangra": "dangra", "curita": "curita"};
-        $.get(url, function(data, status) {
-          console.log(data);
-          var processedData = preProcess(data);
+            createPieChart(processedData);
+          });
 
-          createPieChart(processedData);
-        });
+          var preProcess = function(data) {
+            console.log(data);
+            var processedData = [];
 
-        var preProcess = function(data) {
-          console.log(data);
-          var processedData = [];
+            for (var i = 0; i < data.length; i ++) {
+              var author = data[i].author.login;
+              if(targetContributors[author] == null) {
+                continue;
+              }
+              var contributor = {};
 
-          for (var i = 0; i < data.length; i ++) {
-            var author = data[i].author.login;
-            if(targetContributors[author] == null) {
-              continue;
+              contributor["name"] = author;
+              contributor["commits"] = data[i].total;
+
+              processedData.push(contributor);
             }
-            var contributor = {};
 
-            contributor["name"] = author;
-            contributor["commits"] = data[i].total;
-
-            processedData.push(contributor);
+            return processedData;
           }
 
-          return processedData;
+          var createPieChart = function(data) {
+            var width = 1500, height = 600, radius = 250;
+            var color = d3.scale.ordinal().range(["#A0EEC0","#21A0A0","#41b6c4","#1d91c0","#225ea8","#253494","#081d58", "#0f7788","#edf8b1","#c7e9b4"]);
+            var arc = d3.svg.arc().outerRadius(radius).innerRadius(0);
+            var textLabelArc = d3.svg.arc().outerRadius(radius).innerRadius(radius);
+            var commitLabelArc = d3.svg.arc().outerRadius(radius - 20).innerRadius(radius - 20);
+            var pie = d3.layout.pie().sort(null).value(function(d) { return d.commits; });
+            var svg = d3.select(".contributionChart").append("svg").attr("width", width).attr("height", height).append("g")
+            .attr("transform", "translate(" + width / 3.2 + "," + height / 2 + ")");
+
+            var g = svg.selectAll(".arc")
+            .data(pie(data))
+            .enter()
+            .append("g")
+            .attr("class", "arc")
+            .on("mouseover", function(d) {
+              d3.select("#tooltip")
+              .style('opacity', 1)
+              .html("<strong>Author:</strong> <span style='color:red'>" + d.data.name + "</span><br><strong>Commits: </strong><span style='color:orange'>" + d.data.commits + "</span>");
+            })
+            .on("mousemove", function(d) {
+              d3.select("#tooltip").style("top", (d3.event.pageY - 10) + "px")
+              .style("left", (d3.event.pageX + 10) + "px");
+            })
+            .on("mouseout", function() {
+              d3.select("#tooltip").style('opacity', 0);
+            });
+
+            g.append("path")
+            .attr("d", arc)
+            .style("fill", function(d) { 
+              return color(d.data.name); 
+            });
         }
-
-        var createPieChart = function(data) {
-          var width = 1500, height = 600, radius = 250;
-        // var color = d3.scale.category10();
-        var color = d3.scale.ordinal().range(["#A0EEC0","#21A0A0","#41b6c4","#1d91c0","#225ea8","#253494","#081d58", "#0f7788","#edf8b1","#c7e9b4"]);
-        var arc = d3.svg.arc().outerRadius(radius).innerRadius(0);
-        var textLabelArc = d3.svg.arc().outerRadius(radius).innerRadius(radius);
-        var commitLabelArc = d3.svg.arc().outerRadius(radius - 20).innerRadius(radius - 20);
-        var pie = d3.layout.pie().sort(null).value(function(d) { return d.commits; });
-        var svg = d3.select("body").append("svg").attr("width", width).attr("height", height).append("g")
-        .attr("transform", "translate(" + width / 3.2 + "," + height / 2 + ")");
-
-        var g = svg.selectAll(".arc")
-        .data(pie(data))
-        .enter().append("g")
-        .attr("class", "arc");
-
-        g.append("path")
-        .attr("d", arc)
-        .style("fill", function(d) { return color(d.data.name); });
-
-        g.append("text")
-        .attr("transform", function(d) { 
-          var temp = textLabelArc.centroid(d);
-
-          if (temp[0] < -40) {
-            temp[0] = temp[0] - 100;
-          }
-          if (temp[0] > 40) {
-            temp[0] = temp[0] + 87;
-          }
-          if (temp[0] >= -40 && temp[0] <= 40) {
-            if(temp[1] > 0) {
-              temp[1] += 20;
-            } else {
-              temp[1] -= 20;
-            }
-          }
-
-          return "translate(" + temp + ")"; 
-        }).text(function(d) { return d.data.name + ", " + d.data.commits + " commits"});
-      }
       </script>
 
     </body>

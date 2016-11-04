@@ -6,10 +6,38 @@
     <meta name="description" content="{{seo.projects.description}}">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
     <![endif]-->
+    <style>
+      #contributionTable {
+
+        border: solid gray 1px;
+        border-radius: 3px;
+        color: white;
+        font-family: "HelveticaNeue-Light";
+        margin: 0 auto;
+      }    
+
+      #contributionTable thead {
+        background-color: #263238;
+        color: #E1F5FE;
+        font-size: 25px;
+        font-weight:400;
+      }
+
+      /* Background-color of the odd rows */
+      #contributionTable tbody tr:nth-child(odd) {
+        background-color: #607D8B;
+      }
+
+      /* Background-color of the even rows */
+      #contributionTable tbody tr:nth-child(even) {
+        background-color: #546E7A;
+      }
+    </style>
   </head>
 
   <body class="{{seo.projects.body_class}}">
@@ -22,9 +50,123 @@
         {{> contributions }}
       </div>
 
+      <script>
+      var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner=tungnk1993&repo=scrapy';
+      var commits = [];
+
+      $.get(url, function(data, status) {
+        var processedData = preProcess(data);
+
+        createContributionTable(processedData);
+      });
+
+      var preProcess = function(data) {
+        console.log(data);
+        var processedData = [];
+        var sum = 0;
+
+        for(var i = 0; i < data.length; i++) {
+          var active_loc = (addition - deletion) < 0 ? 0:(addition - deletion);
+
+          sum += active_loc;
+        }
+
+        for(var i = 0; i < data.length; i++) {
+          var author_name = data[i].author_name;
+          var avatar_url = data[i].avatar_url;
+          var commits = data[i].commits;
+          var addition = data[i].addition;
+          var deletion = data[i].deletion;
+          var active_loc = (addition - deletion) < 0 ? 0:(addition - deletion);
+          var contribution = {};
+
+          if(i > 11) {
+            processedData[processedData.length - 1].commits += commits;
+            processedData[processedData.length - 1].addition += addition;
+            processedData[processedData.length - 1].deletion += deletion;
+            processedData[processedData.length - 1].active_loc += active_loc;
+            processedData[processedData.length - 1].weightage += active_loc;
+          } else if(i == 11) {
+            contribution["author_name"] = "others";
+            contribution["commits"] = commits;
+            contribution["addition"] = addition;
+            contribution["deletion"] = deletion;
+            contribution["active_loc"] = active_loc;
+            contribution["weightage"] = active_loc;
+
+            processedData.push(contribution);
+          } else {
+            contribution["author_name"] = author_name;
+            contribution["avatar_url"] = avatar_url;
+            contribution["commits"] = commits;
+            contribution["addition"] = addition;
+            contribution["deletion"] = deletion;
+            contribution["active_loc"] = active_loc;
+            contribution["weightage"] = (active_loc / sum * 100).toFixed(2);
+
+            processedData.push(contribution);
+          }
+        }
+
+        processedData[processedData.length - 1].weightage = (processedData[processedData.length - 1].active_loc / sum * 100).toFixed(2); 
+
+        return processedData;
+      }
+
+      var createContributionTable = function(data) {
+        console.log(data);
+
+        document.body.innerHTML += '<table id="contributionTable" cellpadding="15px">'.concat('</table>');
+        var table = document.getElementById("contributionTable");
+        var header = table.createTHead();
+        var headerRow = header.insertRow(0);
+        var headerCell1 = headerRow.insertCell(0);
+        var headerCell2 = headerRow.insertCell(1);
+        var headerCell3 = headerRow.insertCell(2);
+        var headerCell4 = headerRow.insertCell(3);
+        var headerCell5 = headerRow.insertCell(4);
+        var headerCell6 = headerRow.insertCell(5);
+        headerCell1.innerHTML = "Authors";
+        headerCell2.innerHTML = "Commits";
+        headerCell3.innerHTML = "Additions";
+        headerCell4.innerHTML = "Deletions";
+        headerCell5.innerHTML = "Active Lines";
+        headerCell6.innerHTML = "Weightages (%)";
+        var body = table.createTBody();
+
+        for (var i = 0; i < data.length; i++) {
+          var author_name = data[i].author_name;
+          var commits = data[i].commits;
+          var addition = data[i].addition;
+          var deletion = data[i].deletion;
+          var active_loc = data[i].active_loc;
+          var weightage = data[i].weightage;
+          var row = body.insertRow(i);
+          var dataCell1 = row.insertCell(0);
+          var dataCell2 = row.insertCell(1);
+          var dataCell3 = row.insertCell(2);
+          var dataCell4 = row.insertCell(3);
+          var dataCell5 = row.insertCell(4);
+          var dataCell6 = row.insertCell(5);
+
+          dataCell1.innerHTML = "<span>".concat(author_name).concat("</span>");
+          dataCell2.innerHTML = "<span>".concat(commits).concat("</span>");
+          dataCell3.innerHTML = "<span>".concat(addition).concat("</span>");
+          dataCell4.innerHTML = "<span>".concat(deletion).concat("</span>");
+          dataCell5.innerHTML = "<span>".concat(active_loc).concat("</span>");
+          dataCell6.innerHTML = "<span>".concat(weightage).concat("</span>");
+        }
+      }
+  </script>
+<!--       {{> head }}
+
+      <div class="placeholder">
+        {{> contributions }}
+      </div>
+
       <hr>
 
-      {{> footer }}
+      {{> footer }} -->
 
   </body>
 </html>
