@@ -8,6 +8,7 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -52,9 +53,11 @@
         {{> contributions }}
       </div>
 
-      <hr>
-
-      {{> footer }}
+      <div class="spinner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;">
+      <i style="font-size:100px;" class=" fa fa-circle-o-notch fa-spin fa-3x fa-fw">
+      </i>
+      <p>Loading...</p>
+    </div>
 
       <script type="text/javascript">
         var val = window.location.search;
@@ -67,6 +70,7 @@
       </script>
 
       <script>
+        $('.spinner').css('display', 'flex');
         var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner=tungnk1993&repo=scrapy';
         var commits = [];
 
@@ -172,6 +176,8 @@
             dataCell5.innerHTML = "<span>".concat(active_loc).concat("</span>");
             dataCell6.innerHTML = "<span>".concat(weightage).concat("</span>");
           }
+
+          $('.spinner').css('display', 'none');
         }
       </script>
     </body>

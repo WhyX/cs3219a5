@@ -8,6 +8,7 @@
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
   <link href="assets/css/multi-select.css" media="screen" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
 
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -15,47 +16,47 @@
       <script src="assets/js/html5shiv.js"></script>
       <![endif]-->
       <style>
-        .arc text {
-          font: 15px sans-serif;
-          text-anchor: middle;
-        }
+      .arc text {
+        font: 15px sans-serif;
+        text-anchor: middle;
+      }
 
-        .arc path {
-          stroke: #fff;
-          cursor: pointer;
-        }
+      .arc path {
+        stroke: #fff;
+        cursor: pointer;
+      }
 
-        .arc path:hover {
-          fill: black;
-          stroke: #a9a9a9;
-          opacity: 0.2;
-        }
+      .arc path:hover {
+        fill: black;
+        stroke: #a9a9a9;
+        opacity: 0.2;
+      }
 
-        .header {
-          padding-left: 20px;
-        }
+      .header {
+        padding-left: 20px;
+      }
 
-        .contributionChart {
-          height: auto;
-          width: 100%;
-        }
+      .contributionChart {
+        height: auto;
+        width: 100%;
+      }
 
-        #tooltip {
-          position: absolute;
-          font-weight: bold;
-          padding: 12px;
-          background-color: white;
-          -webkit-border-radius: 3px;
-          -moz-border-radius: 3px;
-          border-radius: 3px;
-          -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-          -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
-          box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
-        }
+      #tooltip {
+        position: absolute;
+        font-weight: bold;
+        padding: 12px;
+        background-color: white;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+        -mox-box-shadow: 4px 4px 4px 10px rgba(0, 0, 0, 0.4);
+        box-shadow: 4px 4px 10px rbga(0, 0, 0, 0.4) pointer-events: none;
+      }
 
-        #tooltip.hidden {
-          opacity: 0;
-        }
+      #tooltip.hidden {
+        opacity: 0;
+      }
       </style>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -70,7 +71,7 @@
         <div class="placeholder">
           {{> effort }}
         </div>
-          
+        
         <h4 style="display: flex;justify-content: center;">Select Members to Compare:</h4>
         <div style="display: flex;justify-content: center;">
           <select multiple="multiple" id="my-select" name="my-select">
@@ -81,14 +82,20 @@
             <option value='elem_100'>elem 100</option>
           </select>
         </div>
+
+        <div class="spinner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;margin-top:50px">
+          <i style="font-size:100px;" class=" fa fa-circle-o-notch fa-spin fa-3x fa-fw">
+          </i>
+          <p>Loading...</p>
+        </div>
         
         <script src="assets/js/jquery.multi-select.js"></script>
 
         <script type="text/javascript">
-                $('#my-select').multiSelect();
+        $('#my-select').multiSelect();
         </script>
 
-         <script type="text/javascript">
+        <script type="text/javascript">
         var val = window.location.search;
         $('.nav').find('a').each(function() {
           var $this = $(this);
@@ -96,12 +103,14 @@
           $this.attr("href", _href + val);
           console.log($this.attr("href"));
         });
-      </script>
+        </script>
 
-      <div class="contributionChart" style="margin-top: 50px"></div>
-      <div id="tooltip" class="hidden">
-      
-      <script>
+        <div class="contributionChart" style="margin-top: 50px"></div>
+        <div id="tooltip" class="hidden">
+          
+          <script>
+          $('.spinner').css('display', 'flex');
+
           var url = "https://api.github.com/repos/tungnk1993/scrapy/stats/contributors";
           var targetContributors = {"pablohoffman": "pablohoffman", "dangra": "dangra", "curita": "curita"};
 
@@ -110,6 +119,8 @@
             var processedData = preProcess(data);
 
             createPieChart(processedData);
+            $('.spinner').css('display', 'none');
+
           });
 
           var preProcess = function(data) {
@@ -165,8 +176,8 @@
             .style("fill", function(d) { 
               return color(d.data.name); 
             });
-        }
-      </script>
+          }
+          </script>
 
-    </body>
-    </html>
+        </body>
+        </html>
