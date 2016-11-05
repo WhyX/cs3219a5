@@ -9,14 +9,14 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
-
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
     <![endif]-->
     <style>
       #contributionTable {
-
         border: solid gray 1px;
         border-radius: 3px;
         color: white;
@@ -40,6 +40,64 @@
       #contributionTable tbody tr:nth-child(even) {
         background-color: #546E7A;
       }
+
+      #tableChart {
+        height: auto;
+        width: 100%;
+      }
+
+      .barChart {
+        height: auto;
+        width: 100%;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .bar {
+        fill: #00BCD4;
+      }
+
+      .bar:hover {
+        fill: orangered ;
+      }
+
+      .x.axis path {
+        display: none;
+      }
+
+      .d3-tip {
+        line-height: 1;
+        font-weight: bold;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        border-radius: 2px;
+      }
+
+      /* Creates a small triangle extender for the tooltip */
+      .d3-tip:after {
+        box-sizing: border-box;
+        display: inline;
+        font-size: 10px;
+        width: 100%;
+        line-height: 1;
+        color: rgba(0, 0, 0, 0.8);
+        content: "\25BC";
+        position: absolute;
+        text-align: center;
+      }
+
+      /* Style northward tooltips differently */
+      .d3-tip.n:after {
+        margin: -1px 0 0 0;
+        top: 100%;
+        left: 0;
+      }
     </style>
   </head>
 
@@ -54,10 +112,10 @@
       </div>
 
       <div class="spinner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;">
-      <i style="font-size:100px;" class=" fa fa-circle-o-notch fa-spin fa-3x fa-fw">
-      </i>
-      <p>Loading...</p>
-    </div>
+        <i style="font-size:100px;" class=" fa fa-circle-o-notch fa-spin fa-3x fa-fw">
+        </i>
+        <p>Loading...</p>
+      </div>
 
       <script type="text/javascript">
         var val = window.location.search;
@@ -69,6 +127,9 @@
         });
       </script>
 
+      <div class="barChart" style="margin-top: 25px;margin-bottom: 50px"></div>
+      <div id="tableChart"></div>
+
       <script>
         $('.spinner').css('display', 'flex');
         var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner=tungnk1993&repo=scrapy';
@@ -77,18 +138,20 @@
         $.get(url, function(data, status) {
           var processedData = preProcess(data);
 
-          createContributionTable(processedData);
+          createContributionBarChart(processedData[0]);
+          createContributionTable(processedData[1]);
         });
 
         var preProcess = function(data) {
           console.log(data);
-          var processedData = [];
+          var processedData1 = [];
+          var processedData2 = [];
           var sum = 0;
 
           for(var i = 0; i < data.length; i++) {
-            var active_loc = (addition - deletion) < 0 ? 0:(addition - deletion);
+            // var active_loc = (addition - deletion) < 0 ? 0:(addition - deletion);
 
-            sum += active_loc;
+            sum += data[i].commits;
           }
 
           for(var i = 0; i < data.length; i++) {
@@ -100,43 +163,132 @@
             var active_loc = (addition - deletion) < 0 ? 0:(addition - deletion);
             var contribution = {};
 
-            if(i > 11) {
-              processedData[processedData.length - 1].commits += commits;
-              processedData[processedData.length - 1].addition += addition;
-              processedData[processedData.length - 1].deletion += deletion;
-              processedData[processedData.length - 1].active_loc += active_loc;
-              processedData[processedData.length - 1].weightage += active_loc;
-            } else if(i == 11) {
-              contribution["author_name"] = "others";
+            if(i > 15) {
+              processedData1[processedData1.length - 1].commits += commits;
+              processedData1[processedData1.length - 1].addition += addition;
+              processedData1[processedData1.length - 1].deletion += deletion;
+              processedData1[processedData1.length - 1].active_loc += active_loc;
+              processedData1[processedData1.length - 1].weightage += commits;
+            } else if(i == 15) {
+              contribution["author_name"] = "*Others";
+              // contribution["author_first_letter"] = "O";
               contribution["commits"] = commits;
               contribution["addition"] = addition;
               contribution["deletion"] = deletion;
               contribution["active_loc"] = active_loc;
-              contribution["weightage"] = active_loc;
+              contribution["weightage"] = commits;
 
-              processedData.push(contribution);
+              processedData1.push(contribution);
             } else {
               contribution["author_name"] = author_name;
+              // contribution["author_first_letter"] = author_name.substring(0, 1).toUpperCase();
               contribution["avatar_url"] = avatar_url;
               contribution["commits"] = commits;
               contribution["addition"] = addition;
               contribution["deletion"] = deletion;
               contribution["active_loc"] = active_loc;
-              contribution["weightage"] = (active_loc / sum * 100).toFixed(2);
+              contribution["weightage"] = parseFloat((commits / sum * 100).toFixed(2));
 
-              processedData.push(contribution);
+              processedData1.push(contribution);
             }
+
+            var contribution2 = {};
+            contribution2["author_name"] = author_name;
+              // contribution["author_first_letter"] = author_name.substring(0, 1).toUpperCase();
+            contribution2["avatar_url"] = avatar_url;
+            contribution2["commits"] = commits;
+            contribution2["addition"] = addition;
+            contribution2["deletion"] = deletion;
+            contribution2["active_loc"] = active_loc;
+            contribution2["weightage"] = parseFloat((commits / sum * 100).toFixed(2));
+
+            processedData2.push(contribution2);
           }
 
-          processedData[processedData.length - 1].weightage = (processedData[processedData.length - 1].active_loc / sum * 100).toFixed(2); 
+          processedData1[processedData1.length - 1].weightage = parseFloat((processedData1[processedData1.length - 1].commits / sum * 100).toFixed(2)); 
 
-          return processedData;
+          return [processedData1, processedData2];
+        }
+
+        var createContributionBarChart = function(data) {
+          console.log(data);
+          var margin = {top: 40, right: 20, bottom: 100, left: 40},
+          width = 960 - margin.left - margin.right,
+          height = 600 - margin.top - margin.bottom;
+
+          var x = d3.scale.ordinal()
+          .rangeRoundBands([0, width], .05);
+
+          var y = d3.scale.linear()
+          .range([height, 0]);
+
+          var xAxis = d3.svg.axis()
+          .scale(x)
+          .orient("bottom");
+
+          var yAxis = d3.svg
+          .axis()
+          .scale(y)
+          .orient("left");
+
+          var tip = d3.tip()
+          .attr('class', 'd3-tip')
+          .offset([-10, 0])
+          .html(function(d) {
+            return "<strong>Author: </strong> <span style='color:red'>" + d.author_name + "</span><br><strong>Commits: </strong> <span style='color:red'>" + d.commits + "</span><br><strong>Additions: </strong> <span style='color:red'>" + d.addition + "</span><br><strong>Deletions: </strong> <span style='color:red'>" + d.deletion + "</span><br>";
+          });
+
+          var svg = d3.select(".barChart")
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", 
+            "translate(" + margin.left + "," + margin.top + ")");
+
+          svg.call(tip);
+
+            // scale the range of the data
+          x.domain(data.map(function(d) { return d.author_name; }));
+          y.domain([0, d3.max(data, function(d) { return d.weightage; })]);
+
+            // add axis
+          svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(xAxis)
+            .selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", "-.55em")
+            .attr("transform", "rotate(-90)" );
+
+          svg.append("g")
+            .attr("class", "y axis")
+            .call(yAxis)
+            .append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 6)
+            .attr("dy", ".71em")
+            .style("text-anchor", "end");
+
+            // Add bar chart
+          svg.selectAll(".bar")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar")
+            .attr("x", function(d) { return x(d.author_name); })
+            .attr("width", x.rangeBand())
+            .attr("y", function(d) { return y(d.weightage); })
+            .attr("height", function(d) { return height - y(d.weightage); })
+            .on('mouseover', tip.show)
+            .on('mouseout', tip.hide);
         }
 
         var createContributionTable = function(data) {
           console.log(data);
 
-          document.body.innerHTML += '<table id="contributionTable" cellpadding="15px">'.concat('</table>');
+          document.getElementById("tableChart").innerHTML = '<table id="contributionTable" cellpadding="15px">'.concat('</table>');
           var table = document.getElementById("contributionTable");
           var header = table.createTHead();
           var headerRow = header.insertRow(0);
