@@ -213,7 +213,7 @@
             .on("mouseover", function(d) {
               d3.select("#tooltip")
               .style('opacity', 1)
-              .html("<strong>Author:</strong> <span style='color:#4ADBC8'>" + d.data.author_name + "</span><br><strong>Commits: </strong><span style='color:orange'>" + d.data.commits + "</span>");
+              .html("<strong>Author:</strong> <span style='color:#4ADBC8'>" + d.data.author_name + "</span><br><strong>Commits: </strong><span style='color:#4ADBC8'>" + d.data.commits + "</span>");
             })
             .on("mousemove", function(d) {
               d3.select("#tooltip").style("top", (d3.event.pageY - 10) + "px")

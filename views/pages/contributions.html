@@ -256,7 +256,7 @@
           .attr('class', 'd3-tip')
           .offset([-10, 0])
           .html(function(d) {
-            return "<strong>Author: </strong> <span style='color:#4ADBC8'>" + d.author_name + "</span><br><strong>Commits: </strong> <span style='color:orange'>" + d.commits + "</span><br><strong>Additions: </strong> <span style='color:orange'>" + d.addition + "</span><br><strong>Deletions: </strong> <span style='color:orange'>" + d.deletion + "</span><br>";
+            return "<strong>Author: </strong> <span style='color:#4ADBC8'>" + d.author_name + "</span><br><strong>Commits: </strong> <span style='color:#4ADBC8'>" + d.commits + "</span><br><strong>Additions: </strong> <span style='color:#4ADBC8'>" + d.addition + "</span><br><strong>Deletions: </strong> <span style='color:#4ADBC8'>" + d.deletion + "</span><br>";
           });
 
           var svg = d3.select(".barChart")
