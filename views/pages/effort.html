@@ -75,12 +75,13 @@
         <h4 style="display: flex;justify-content: center;">Select Members to Compare:</h4>
         <div style="display: flex;justify-content: center;">
           <select multiple="multiple" id="my-select" name="my-select">
-            <option value='elem_1'>elem 1</option>
-            <option value='elem_2'>elem 2</option>
-            <option value='elem_3'>elem 3</option>
-            <option value='elem_4'>elem 4</option>
-            <option value='elem_100'>elem 100</option>
           </select>
+        </div>
+
+         <div style="display:flex;justify-content: center;">
+           <button id="submit-btn" type="button" class="btn btn-primary" style="font-family:Ubuntu;display:flex;justify-content: center;margin: 10px 0px;text-transform: uppercase;">
+            Submit
+          </button>
         </div>
 
         <div class="spinner" style="display:flex;flex-direction:column;justify-content:center;align-items:center;margin-top:50px">
@@ -91,9 +92,7 @@
         
         <script src="assets/js/jquery.multi-select.js"></script>
 
-        <script type="text/javascript">
-        $('#my-select').multiSelect();
-        </script>
+
 
         <script type="text/javascript">
         var val = window.location.search;
@@ -111,17 +110,56 @@
           <script>
           $('.spinner').css('display', 'flex');
 
-          var url = "https://api.github.com/repos/tungnk1993/scrapy/stats/contributors";
-          var targetContributors = {"pablohoffman": "pablohoffman", "dangra": "dangra", "curita": "curita"};
 
-          $.get(url, function(data, status) {
+          var memberUrl = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner=tungnk1993&repo=scrapy';
+  
+          $.get(memberUrl, function(data, status) {
             console.log(data);
-            var processedData = preProcess(data);
+            for(var i = 0;i < data.length; i++){
+             $('#my-select').append($('<option>', { 
+                    value: data[i].author_name,
+                    text : data[i].author_name
+                }));
+             console.log($('#my-select').html());
+            }
+            $('#my-select').multiSelect();
+          });
 
-            createPieChart(processedData);
-            $('.spinner').css('display', 'none');
+           var val = window.location.search.match(/github=https:\/\/github.com\/([^&]*)/);
+            var user = '';
+            var repo = '';
+            if (val) {
+              var x = val[1];
+              var div = x.indexOf('/');
+              user = x.substring(0, div);
+              repo = x.substring(div + 1);
+            }
+            var emailArr = window.location.search.match(/email=([^&]*)/);
+            var email;
+            if (emailArr) {
+              email = emailArr[1];
+            }
+              $('.spinner').css('display', 'none');
+
+          var url;
+          $('#submit-btn').on('click', function() {
+              var people = $('select#my-select').val();
+              if(people) {
+                people = people.join();
+              }
+              //email=email, owner=user, repo=repo
+              url = "https://api.github.com/repos/tungnk1993/scrapy/stats/contributors" +'?people=' + people;
+              $.get(url, function(data, status) {
+                console.log(data);
+                var processedData = preProcess(data);
+
+                createPieChart(processedData);
+                $('.spinner').css('display', 'none');
+
+              });
 
           });
+          var targetContributors = {"pablohoffman": "pablohoffman", "dangra": "dangra", "curita": "curita"};
 
           var preProcess = function(data) {
             console.log(data);

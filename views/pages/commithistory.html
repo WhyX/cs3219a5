@@ -117,7 +117,7 @@
       $('#submit-btn').on('click', function (){
         var author = $('#author-inputbar').val();
         var file = $('#file-inputbar').val();
-      url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'T00:00:49Z&end='+end+'T00:00:06.573Z'+'&file'+file;
+      url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'T00:00:49Z&end='+end+'T00:00:06.573Z'+'&file='+file+'&email='+email;
       var commits = [];
 
       $.get(url, function(data, status) {
