@@ -33,6 +33,11 @@
       </button>
     </div>
 
+
+    <div class="submitdone"  style="display:flex;justify-content: center; margin-bottom:30px;">
+      Please select the following tabs when you have clicked Submit to check out the repo! 
+    </div>
+
     
 
     {{> head }}
@@ -58,6 +63,8 @@
   $('#submit-btn-email').on('click', function() {
     var val = '?email='+ $('#email-inputbar').val() +  "&github=" + $('#github-inputbar').val();
     window.location.search = val;
+        $('.submitdone').css('display', 'flex');
+
     $('.nav').find('a').each(function() {
       var $this = $(this);
       var _href = $this.attr("href");

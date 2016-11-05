@@ -114,7 +114,7 @@
 
           $('.spinner').css('display', 'flex');
 
-          var val = window.location.search.match(/github=https:\/\/github.com\/([^&]*)/);
+          var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
         var user = '';
         var repo = '';
         if (val) {
@@ -145,7 +145,7 @@
             $('.spinner').css('display', 'none');
           });
 
-           var val = window.location.search.match(/github=https:\/\/github.com\/([^&]*)/);
+           var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
             var user = '';
             var repo = '';
             if (val) {
