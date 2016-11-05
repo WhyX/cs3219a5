@@ -20,7 +20,6 @@
         border: solid gray 1px;
         border-radius: 3px;
         color: white;
-        font-family: "HelveticaNeue-Light";
         margin: 0 auto;
       }    
 
@@ -98,6 +97,10 @@
         top: 100%;
         left: 0;
       }
+
+      #moreDetail.hidden {
+        opacity: 0;
+      }
     </style>
   </head>
 
@@ -127,7 +130,9 @@
         });
       </script>
 
-      <div class="barChart" style="margin-top: 25px;margin-bottom: 50px"></div>
+      <div class="barChart" style="margin-top: 25px;margin-bottom: 50px">
+        <span id="moreDetail" class="hidden">Please hover for more information.</span>
+      </div>
       <div id="tableChart"></div>
 
       <script>
@@ -251,7 +256,7 @@
           .attr('class', 'd3-tip')
           .offset([-10, 0])
           .html(function(d) {
-            return "<strong>Author: </strong> <span style='color:red'>" + d.author_name + "</span><br><strong>Commits: </strong> <span style='color:orange'>" + d.commits + "</span><br><strong>Additions: </strong> <span style='color:orange'>" + d.addition + "</span><br><strong>Deletions: </strong> <span style='color:orange'>" + d.deletion + "</span><br>";
+            return "<strong>Author: </strong> <span style='color:#4ADBC8'>" + d.author_name + "</span><br><strong>Commits: </strong> <span style='color:orange'>" + d.commits + "</span><br><strong>Additions: </strong> <span style='color:orange'>" + d.addition + "</span><br><strong>Deletions: </strong> <span style='color:orange'>" + d.deletion + "</span><br>";
           });
 
           var svg = d3.select(".barChart")
@@ -303,8 +308,7 @@
 
         var createContributionTable = function(data) {
           console.log(data);
-
-          document.getElementById("tableChart").innerHTML = '<table id="contributionTable" cellpadding="15px">'.concat('</table>');
+          document.getElementById("tableChart").innerHTML += '<table id="contributionTable" cellpadding="15px">'.concat('</table>');
           var table = document.getElementById("contributionTable");
           var header = table.createTHead();
           var headerRow = header.insertRow(0);
@@ -344,6 +348,8 @@
             dataCell5.innerHTML = "<span>".concat(active_loc).concat("</span>");
             dataCell6.innerHTML = "<span>".concat(weightage).concat("</span>");
           }
+
+          document.getElementById('moreDetail').style.opacity = "1";
 
           $('.spinner').css('display', 'none');
         }

@@ -57,6 +57,10 @@
       #tooltip.hidden {
         opacity: 0;
       }
+
+      #moreDetail.hidden {
+        opacity: 0;
+      }
       </style>
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
       <script src="https://d3js.org/d3.v3.min.js"></script>
@@ -94,8 +98,6 @@
         
         <script src="assets/js/jquery.multi-select.js"></script>
 
-
-
         <script type="text/javascript">
         var val = window.location.search;
         $('.nav').find('a').each(function() {
@@ -106,7 +108,9 @@
         });
         </script>
 
-        <div class="contributionChart" style="margin-top: 50px"></div>
+        <div class="contributionChart" style="margin-top: 50px">
+          <span id="moreDetail" class="hidden">Please hover for more information.</span>
+        </div>
         <div id="tooltip" class="hidden">
           
           <script>
@@ -209,7 +213,7 @@
             .on("mouseover", function(d) {
               d3.select("#tooltip")
               .style('opacity', 1)
-              .html("<strong>Author:</strong> <span style='color:red'>" + d.data.author_name + "</span><br><strong>Commits: </strong><span style='color:orange'>" + d.data.commits + "</span>");
+              .html("<strong>Author:</strong> <span style='color:#4ADBC8'>" + d.data.author_name + "</span><br><strong>Commits: </strong><span style='color:orange'>" + d.data.commits + "</span>");
             })
             .on("mousemove", function(d) {
               d3.select("#tooltip").style("top", (d3.event.pageY - 10) + "px")
@@ -224,6 +228,8 @@
             .style("fill", function(d) { 
               return color(d.data.author_name); 
             });
+
+            document.getElementById('moreDetail').style.opacity = "1";
           }
           </script>
 
