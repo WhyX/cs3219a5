@@ -132,7 +132,16 @@
 
       <script>
         $('.spinner').css('display', 'flex');
-        var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner=tungnk1993&repo=scrapy';
+        var val = window.location.search.match(/github=https:\/\/github.com\/([^&]*)/);
+        var user = '';
+        var repo = '';
+        if (val) {
+          var x = val[1];
+          var div = x.indexOf('/');
+          user = x.substring(0, div);
+          repo = x.substring(div + 1);
+        }
+        var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner='+user+'&repo='+repo;
         var commits = [];
 
         $.get(url, function(data, status) {
