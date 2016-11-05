@@ -12,7 +12,20 @@
   <script src="assets/js/commitHistory.js"></script>
   <script src="assets/js/jquery.color-2.1.2.min.js"></script>
   <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
-
+ <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+      <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+      <!-- Javascript -->
+      <script>
+         $(function() {
+            $( "#datepicker-3" ).datepicker({
+               appendText:"(yy-mm-dd)",
+               dateFormat:"yy-mm-dd",
+               altField: "#datepicker-4",
+               altFormat: "DD, d MM, yy"
+            });
+         });
+      </script>
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -38,6 +51,8 @@
           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
             <input type="text" class="form-control" placeholder="File" aria-describedby="basic-addon1" id="user-filebar" style="margin-right: 10px;">
           </div>
+
+          <p>Enter Date: <input type="text" id="datepicker-3"></p>
 
           <div style="display:flex;justify-content: center;">
            <button id="submit-btn" type="button" class="btn btn-primary" style="display:flex;justify-content: center;margin-bottom: 10px;text-transform: uppercase;">
