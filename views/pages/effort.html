@@ -110,11 +110,12 @@
           <script>
           $('.spinner').css('display', 'flex');
 
-
           var memberUrl = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner=tungnk1993&repo=scrapy';
+          var retrievedData;
   
           $.get(memberUrl, function(data, status) {
             console.log(data);
+            retrievedData = data;
             for(var i = 0;i < data.length; i++){
              $('#my-select').append($('<option>', { 
                     value: data[i].author_name,
@@ -142,38 +143,37 @@
               $('.spinner').css('display', 'none');
 
           var url;
+
           $('#submit-btn').on('click', function() {
               var people = $('select#my-select').val();
-              if(people) {
-                people = people.join();
-              }
+              // console.log(people);
+              // if(people) {
+              //   people = people.join();
+              // }
               //email=email, owner=user, repo=repo
-              url = "https://api.github.com/repos/tungnk1993/scrapy/stats/contributors" +'?people=' + people;
-              $.get(url, function(data, status) {
-                console.log(data);
-                var processedData = preProcess(data);
+              // console.log(people);
+              var targetContributors = {};
+              for (var i = 0; i < people.length; i++) {
+                targetContributors[people[i]] = people[i];
+              }
+              console.log(targetContributors);
+              var processedData = preProcess(targetContributors);
 
-                createPieChart(processedData);
-                $('.spinner').css('display', 'none');
-
-              });
-
+              createPieChart(processedData);
+              $('.spinner').css('display', 'none');
           });
-          var targetContributors = {"pablohoffman": "pablohoffman", "dangra": "dangra", "curita": "curita"};
 
-          var preProcess = function(data) {
-            console.log(data);
+          var preProcess = function(targetContributors) {
             var processedData = [];
 
-            for (var i = 0; i < data.length; i ++) {
-              var author = data[i].author.login;
-              if(targetContributors[author] == null) {
+            for (var i = 0; i < retrievedData.length; i ++) {
+              if(targetContributors[retrievedData[i].author_name] == null) {
                 continue;
               }
               var contributor = {};
 
-              contributor["name"] = author;
-              contributor["commits"] = data[i].total;
+              contributor["author_name"] = retrievedData[i].author_name;
+              contributor["commits"] = retrievedData[i].commits;
 
               processedData.push(contributor);
             }
@@ -182,8 +182,10 @@
           }
 
           var createPieChart = function(data) {
+            var colorRange = ["#A0EEC0","#21A0A0","#41b6c4","#1d91c0","#225ea8","#253494","#081d58", "#0f7788","#edf8b1","#c7e9b4", "#01579B", "#006064", "#004D40", "#0277BD", "#00838F", "#00695C", "#0288D1", "#0097A7", "#00796B"];
+            d3.select("svg").remove();
             var width = 1500, height = 600, radius = 250;
-            var color = d3.scale.ordinal().range(["#A0EEC0","#21A0A0","#41b6c4","#1d91c0","#225ea8","#253494","#081d58", "#0f7788","#edf8b1","#c7e9b4"]);
+            var color = d3.scale.ordinal().range(colorRange);
             var arc = d3.svg.arc().outerRadius(radius).innerRadius(0);
             var textLabelArc = d3.svg.arc().outerRadius(radius).innerRadius(radius);
             var commitLabelArc = d3.svg.arc().outerRadius(radius - 20).innerRadius(radius - 20);
@@ -199,7 +201,7 @@
             .on("mouseover", function(d) {
               d3.select("#tooltip")
               .style('opacity', 1)
-              .html("<strong>Author:</strong> <span style='color:red'>" + d.data.name + "</span><br><strong>Commits: </strong><span style='color:orange'>" + d.data.commits + "</span>");
+              .html("<strong>Author:</strong> <span style='color:red'>" + d.data.author_name + "</span><br><strong>Commits: </strong><span style='color:orange'>" + d.data.commits + "</span>");
             })
             .on("mousemove", function(d) {
               d3.select("#tooltip").style("top", (d3.event.pageY - 10) + "px")
@@ -212,7 +214,7 @@
             g.append("path")
             .attr("d", arc)
             .style("fill", function(d) { 
-              return color(d.data.name); 
+              return color(d.data.author_name); 
             });
           }
           </script>
