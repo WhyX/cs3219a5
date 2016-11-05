@@ -9,6 +9,7 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -42,10 +43,60 @@
         Submit
         </button>
       </div>
+
+      <div class="alert alert-success alert-dismissible fade in" role="alert" style="display: none">
+        <button type="button" class="close" data-hide="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <strong></strong> - <span id="emailLabel"></span>
+      </div>
+
       <script type="text/javascript">
-    $('#submit-btn').on('click', function() {
-      console.log($('#user-inputbar').val());
-    });
-  </script>
+        $(function(){
+            $("[data-hide]").on("click", function(){
+                $("." + $(this).attr("data-hide")).hide();
+                // -or-, see below
+                // $(this).closest("." + $(this).attr("data-hide")).hide();
+            });
+        });
+        $('#submit-btn').on('click', function() {
+          var repo = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
+          if (repo) {
+            var x = repo[0];
+            console.log(x);
+            var div = x.indexOf('github=');
+            console.log(div);
+            repo = x.substring(div + 7);
+          }
+          var val = '?email='+ $('#user-inputbar').val() +  "&repo=" + repo;
+          var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/subscription/create' + val;
+
+          console.log($('#user-inputbar').val());
+          console.log(url);
+          $.get(url, function(data, status, xhr) {
+            console.log(data);
+            $(".alert").find('strong').text(data.message);
+            $(".alert").find('#emailLabel').text($('#user-inputbar').val());
+            $(".alert").show();
+          });
+        });
+
+        // jQuery["postJSON"] = function( url, data, callback ) {
+        //     // shift arguments if data argument was omitted
+        //     if ( jQuery.isFunction( data ) ) {
+        //       callback = data;
+        //       data = undefined;
+        //     }
+
+        //     return jQuery.ajax({
+        //       url: url,
+        //       type: "POST",
+        //       contentType:"application/json; charset=utf-8",
+        //       dataType: "json",
+        //       data: data,
+        //       success: callback
+        //     });
+        //   };
+      </script>
   </body>
 </html>
