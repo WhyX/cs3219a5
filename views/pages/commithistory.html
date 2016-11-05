@@ -34,6 +34,10 @@
 
         <div>
           <div class="input-group" style="font-family:Ubuntu;display:flex;justify-content: center; margin-bottom:30px;">
+            All fields are optional. Enter in a specific field to narrow your search.
+          </div>
+
+          <div class="input-group" style="font-family:Ubuntu;display:flex;justify-content: center; margin-bottom:30px;">
             <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="Username" aria-describedby="basic-addon1" id="author-inputbar" >
           </div>
 
@@ -76,8 +80,8 @@
       </script>
 
       <script>
-      var start;
-      var end;
+      var start = new Date(2000, 1, 1);
+      var end = new Date();
       $( "#datepicker-8" ).datepicker({
        prevText:"click for previous months",
        nextText:"click for next months",
@@ -85,7 +89,7 @@
        selectOtherMonths: false,
        dateFormat: "yy/mm/dd",
        onSelect: function(date) {
-        start = date;
+        start = date + 'T00:00:00Z';
       }
     });
       $( "#datepicker-9" ).datepicker({
@@ -95,7 +99,7 @@
        selectOtherMonths: true,
       dateFormat: "yy/mm/dd",
       onSelect: function(date) {
-        end = date;
+        end = date + 'T00:00:00Z';
       }
     });
 
@@ -123,7 +127,7 @@
         var author = $('#author-inputbar').val();
         var file = $('#file-inputbar').val();
         var linenumber = $('#linenumber-inputbar').val();
-      url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'T00:00:49Z&end='+end+'T00:00:06.573Z'+'&file='+file+'&email='+email+'&linenumber='linenumber;
+      url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end+'T00:00:06.573Z'+'&file='+file+'&email='+email+'&linenumber='+linenumber;
       var commits = [];
 
       $.get(url, function(data, status) {

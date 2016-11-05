@@ -63,7 +63,23 @@
       </script>
 
         <script type="text/javascript">
-            $.get("https://api.github.com/repos/tungnk1993/scrapy/stats/punch_card", function(data) {
+
+          var val = window.location.search.match(/github=https:\/\/github.com\/([^&]*)/);
+            var user = '';
+            var repo = '';
+            if (val) {
+              var x = val[1];
+              var div = x.indexOf('/');
+              user = x.substring(0, div);
+              repo = x.substring(div + 1);
+            }
+            var emailArr = window.location.search.match(/email=([^&]*)/);
+            var email;
+            if (emailArr) {
+              email = emailArr[1];
+            }
+
+            $.get("https://api.github.com/repos/"+user+"/"+ repo+"/stats/punch_card", function(data) {
                 heatmapChart(data);
             });
 
