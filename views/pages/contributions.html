@@ -141,7 +141,14 @@
           user = x.substring(0, div);
           repo = x.substring(div + 1);
         }
-        var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner='+user+'&repo='+repo;
+        var emailArr = window.location.search.match(/email=([^&]*)/);
+        var email;
+        if (emailArr) {
+          email = emailArr[1];
+        }
+
+        var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner='+user+'&repo='+repo + '&email=' + email;
+
         var commits = [];
 
         $.get(url, function(data, status) {

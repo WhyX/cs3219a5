@@ -12,21 +12,10 @@
   <script src="assets/js/commitHistory.js"></script>
   <script src="assets/js/jquery.color-2.1.2.min.js"></script>
   <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
- <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
-      <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-      <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-      <!-- Javascript -->
-      <script>
-         $(function() {
-            $( "#datepicker-3" ).datepicker({
-               appendText:"(yy-mm-dd)",
-               dateFormat:"yy-mm-dd",
-               altField: "#datepicker-4",
-               altFormat: "DD, d MM, yy"
-            });
-         });
-      </script>
-
+  <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <!-- Javascript -->
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
@@ -45,16 +34,17 @@
 
         <div>
           <div class="input-group" style="font-family:Ubuntu;display:flex;justify-content: center; margin-bottom:30px;">
-            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="Username" aria-describedby="basic-addon1" id="user-inputbar" >
+            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="Username" aria-describedby="basic-addon1" id="author-inputbar" >
           </div>
 
           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="user-filebar" >
+            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="file-inputbar" >
           </div>
 
           <div style="display:flex;justify-content: center; flex-direction:column; align-items:center;margin-bottom:30px;">
-            <input type="text" style="font-family:Ubuntu;" placeholder="Enter Date" id="datepicker-3">
-        </div>
+            <input type="text" style="margin-bottom:30px;font-family:Ubuntu;" placeholder="Enter Start Date" id="datepicker-8">
+            <input type="text" style="font-family:Ubuntu;" placeholder="Enter End Date" id="datepicker-9">
+          </div>
 
           <div style="display:flex;justify-content: center;">
            <button id="submit-btn" type="button" class="btn btn-primary" style="font-family:Ubuntu;display:flex;justify-content: center;margin-bottom: 10px;text-transform: uppercase;">
@@ -77,14 +67,57 @@
         var $this = $(this);
         var _href = $this.attr("href");
         $this.attr("href", _href + val);
-        console.log($this.attr("href"));
       });
       </script>
 
       <script>
+      var start;
+      var end;
+      $( "#datepicker-8" ).datepicker({
+       prevText:"click for previous months",
+       nextText:"click for next months",
+       showOtherMonths:true,
+       selectOtherMonths: false,
+       dateFormat: "yy/mm/dd",
+       onSelect: function(date) {
+        start = date;
+      }
+    });
+      $( "#datepicker-9" ).datepicker({
+       prevText:"click for previous months",
+       nextText:"click for next months",
+       showOtherMonths:true,
+       selectOtherMonths: true,
+      dateFormat: "yy/mm/dd",
+      onSelect: function(date) {
+        end = date;
+      }
+    });
+
       $('.spinner').css('display', 'flex');
 
-      var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner=tungnk1993&repo=scrapy&author=pablohoffman&start=2011-04-14T16:00:49Z&end=2016-11-02T17:31:06.573Z';
+        var val = window.location.search.match(/github=https:\/\/github.com\/([^&]*)/);
+        var user = '';
+        var repo = '';
+        if (val) {
+          var x = val[1];
+          var div = x.indexOf('/');
+          user = x.substring(0, div);
+          repo = x.substring(div + 1);
+        }
+        var emailArr = window.location.search.match(/email=([^&]*)/);
+        var email;
+        if (emailArr) {
+          email = emailArr[1];
+        }
+   
+
+      // append start, end; keep 00:00 
+      var url;
+      $('#submit-btn').on('click', function (){
+        var author = $('#author-inputbar').val();
+        var file = $('#file-inputbar').val();
+      url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'T00:00:49Z&end='+end+'T00:00:06.573Z'+'&file'+file;
       var commits = [];
 
       $.get(url, function(data, status) {
@@ -95,6 +128,8 @@
         $('.spinner').css('display', 'none');
       });
 
+      });
+     
       var preProcess = function(data) {
         console.log(data);
         var processedData = {};
