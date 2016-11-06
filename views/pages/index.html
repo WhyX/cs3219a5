@@ -35,7 +35,10 @@
 
 
     <div class="submitdone"  style="display:flex;justify-content: center; margin-bottom:30px;">
-      Please select the following tabs when you have clicked Submit to check out the repo! 
+      Please select the following tabs when you have clicked Submit to check out the repo!
+    </div>
+     <div class="submitdone"  style="display:flex;justify-content: center; margin-bottom:30px;">
+      Links are disabled if an invalid github url is entered.
     </div>
 
     
@@ -81,9 +84,9 @@
   $('.nav').find('a').each(function() {
           var $this = $(this);
 
-      if(val && email) {
+      if(val ) {
          // $this.click(true);
-         $('a').off('click.myDisable');
+         $this.off('click.myDisable');
         $this.css('color', 'rgba(0, 0, 0, 1)');
       } 
     });
@@ -98,7 +101,7 @@
     $('.nav').find('a').each(function() {
       var $this = $(this);
       var _href = $this.attr("href");
-      if(email && github) {
+      if( github) {
          // $this.click(true);
          $('a').off('click.myDisable');
         $this.css('color', 'rgba(0, 0, 0, 1)');
