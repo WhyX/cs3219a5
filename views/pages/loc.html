@@ -31,12 +31,9 @@
         }
 
         img {
-          height: 30px;
-          margin-left: 10px;
+          height: 50px;
+          margin-left: 15px;
           display: inline-block;
-          padding: 5px 8px 5px 8px;
-          -moz-border-radius: 50%;
-          -webkit-border-radius: 50%;
           border-radius: 50%;
         }
 
@@ -47,6 +44,7 @@
           line-height: 30px;
           padding: 5px 8px 5px 8px;
           color: white;
+          margin-top: 10px;
         }
 
         .timelineCell {
@@ -85,8 +83,13 @@
         }
 
         .changesCell {
-          margin: 0px 0px 5px 10px;
           padding: 10px 0px 10px 20px;
+        }
+
+        .codeDisplay {
+          width: 80%;
+          font-size: 12px;
+          padding: 5px 0px 5px 5px;
         }
       </style>
     </head>
@@ -229,25 +232,24 @@
             commit["image_url"] = image_url;
             commit["author_name"] = author_name;
 
-            var oldChangesStr, newChangesStr;
+            var oldChangesStr = "";
+            var newChangesStr = "";
 
-            if(oldChanges["1"] != null) {
-              oldChangesStr = oldChanges["1"];
+            if(!$.isEmptyObject(oldChanges)) {
               Object.keys(oldChanges).forEach(function(key) {
-                if(key != "1") {
-                  oldChangesStr = oldChangesStr.concat("<br>").concat(oldChanges[key])
-                }
+                var temp = oldChanges[key].replace(/\</g, '&lt;');
+                temp = temp.replace(/\>/g, '&gt;');
+                oldChangesStr = oldChangesStr.concat("<div style='font-size:15px;padding:5px'>Line ").concat(key).concat("</div><pre class='codeDisplay'>").concat(temp).concat("</pre>");
               });
             } else {
               oldChangesStr = "None";
             }
 
-            if(newChanges["1"] != null) {
-              newChangesStr = newChanges["1"];
+            if(!$.isEmptyObject(newChanges)) {
               Object.keys(newChanges).forEach(function(key) {
-                if(key != "1") {
-                  newChangesStr = newChangesStr.concat("<br>").concat(newChanges[key])
-                }
+                var temp = newChanges[key].replace(/\</g, '&lt;');
+                temp = temp.replace(/\>/g, '&gt;');
+                newChangesStr = newChangesStr.concat("<div style='font-size:15px;padding:5px'>Line ").concat(key).concat("</div><pre class='codeDisplay'>").concat(temp).concat("</pre>");
               });
             } else {
               newChangesStr = "None";
@@ -310,13 +312,13 @@
               var row3 = table.insertRow(rowIndex);
               var dataCell3 = row3.insertCell(0);
 
-              dataCell3.innerHTML = "<div style='padding:5px'>Old Changes: </div><div class='changesCell' style='background:#FF8A80'><span>".concat(oldChangesStr).concat("</span></div>");
+              dataCell3.innerHTML = "<div style='padding:10px'>Old Changes: </div><div class='changesCell' style='background:#FF8A80'>".concat(oldChangesStr).concat("</div>");
               rowIndex++;
 
               var row4 = table.insertRow(rowIndex);
               var dataCell4 = row4.insertCell(0);
 
-              dataCell4.innerHTML = "<div style='padding:5px'>New Changes: </div><div class='changesCell' style='background: #00E676'><span>".concat(newChangesStr).concat("</span></div>");
+              dataCell4.innerHTML = "<div style='padding:10px'>New Changes: </div><div class='changesCell' style='background: #00E676'>".concat(newChangesStr).concat("</div>");
               rowIndex++;
             }
   }
