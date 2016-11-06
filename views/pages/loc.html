@@ -1,152 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>{{seo.about.title}}</title>
-    <meta charset="utf-8">
-    <meta name="description" content="{{seo.about.description}}">
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<head>
+  <title>{{seo.commithistory.title}}</title>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+  <meta name="description" content="{{seo.commithistory.description}}">
+  <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="assets/css/commitHistory.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="assets/js/commitHistory.js"></script>
+  <script src="assets/js/jquery.color-2.1.2.min.js"></script>
+  <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
+  <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <!-- Javascript -->
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
-    <![endif]-->
-     <style>
-      #contributionTable {
-        border: solid gray 1px;
-        border-radius: 3px;
-        color: white;
-        font-family: "HelveticaNeue-Light";
-        margin: 0 auto;
-      }    
+      <![endif]-->
+    </head>
 
-      #contributionTable thead {
-        background-color: #263238;
-        color: #E1F5FE;
-        font-size: 25px;
-        font-weight:400;
-      }
+    <body class="{{seo.commithistory.body_class}}">
 
-      /* Background-color of the odd rows */
-      #contributionTable tbody tr:nth-child(odd) {
-        background-color: #607D8B;
-      }
+      <div class="container">
 
-      /* Background-color of the even rows */
-      #contributionTable tbody tr:nth-child(even) {
-        background-color: #546E7A;
-      }
-    </style>
-  </head>
+        {{> head }}
 
-  <body class="{{seo.about.body_class}}">
+        <div class="placeholder">
+          {{> loc }}
+        </div>
 
-    <div class="container">
+        <div>
+          <div class="input-group" style="font-family:Ubuntu;display:flex;justify-content: center; margin-bottom:30px;">
+            All fields are required.
+          </div>
 
-      {{> head }}
 
-      <div class="placeholder">
-        {{> loc }}
+
+          <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="file-inputbar" >
+          </div>
+
+
+          <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="Line Number Range(Ex.1-10)" aria-describedby="basic-addon1" id="linenumber-inputbar" >
+          </div>
+
+          <div style="display:flex;justify-content: center;">
+           <button id="submit-btn" type="button" class="btn btn-primary" style="font-family:Ubuntu;display:flex;justify-content: center;margin-bottom: 10px;text-transform: uppercase;">
+            Submit
+          </button>
+        </div>
       </div>
 
+      <div class="spinner" style="display:none;flex-direction:column;justify-content:center;align-items:center;margin-top:50px">
+        <i style="font-size:100px;" class=" fa fa-circle-o-notch fa-spin fa-3x fa-fw">
+        </i>
+        <p>Loading...</p>
+      </div>
 
-       <script type="text/javascript">
-        var val = window.location.search;
-        $('.nav').find('a').each(function() {
-          var $this = $(this);
-          var _href = $this.attr("href");
-          $this.attr("href", _href + val);
-          console.log($this.attr("href"));
-        });
+      <table id="myTable">
+        <tbody>
+          <tr>
+            <td>
+              test
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="commitHistory" style="height: auto; width: 100%"></div>
+
+      <script type="text/javascript">
+      var val = window.location.search;
+      $('.nav').find('a').each(function() {
+        var $this = $(this);
+        var _href = $this.attr("href");
+        $this.attr("href", _href + val);
+      });
       </script>
 
       <script>
-      var url = 'https://api.github.com/repos/';
-      var owner = 'tungnk1993/';
-      var repo = 'scrapy/';
-      var prefix = 'stats/contributors';
-      var url = url.concat(owner).concat(repo).concat(prefix);
-      var commits = [];
+      var start = new Date(2000, 1, 1).toLocaleDateString() + 'T00:00:00Z';
+      var end = new Date().toLocaleDateString() + 'T00:00:00Z';
+      $( "#datepicker-8" ).datepicker({
+       prevText:"click for previous months",
+       nextText:"click for next months",
+       showOtherMonths:true,
+       selectOtherMonths: false,
+       dateFormat: "yy/mm/dd",
+       onSelect: function(date) {
+        start = date + 'T00:00:00Z';
+      }
+    });
+      $( "#datepicker-9" ).datepicker({
+       prevText:"click for previous months",
+       nextText:"click for next months",
+       showOtherMonths:true,
+       selectOtherMonths: true,
+       dateFormat: "yy/mm/dd",
+       onSelect: function(date) {
+        end = date + 'T00:00:00Z';
+      }
+    });
 
+      var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
+      var user = '';
+      var repo = '';
+      if (val) {
+        var x = val[1];
+        var div = x.indexOf('/');
+        user = x.substring(0, div);
+        repo = x.substring(div + 1);
+      }
+      var emailArr = window.location.search.match(/email=([^&]*)/);
+      var email;
+      if (emailArr) {
+        email = emailArr[1];
+      }
+
+
+
+      // append start, end; keep 00:00 
+      $('#submit-btn').on('click', function (){
+        var url;
+        var file = $('#file-inputbar').val();
+        var linenumber = $('#linenumber-inputbar').val().split('-');
+
+
+        // url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end+'T00:00:06.573Z'+'&file='+file+'&email='+email+'&linenumber='+linenumber;
+
+        if(file != null && linenumber.length == 2) {
+         // url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/file?owner=tungnk1993&repo=scrapy&path=docs%2Ftopics%2Fmedia-pipeline.rst&from=192&to=195';
+         url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/file?owner='+ user+'&repo='+repo+'&path='+file+'&from='+ linenumber[0] + '&to='+ linenumber[1];
+       }
+       else {
+        console.log("not indicated");
+        return;
+      }
+      $('.spinner').css('display', 'flex');
+
+      console.log(url);
       $.get(url, function(data, status) {
-        var processedData = preProcess(data);
-
-        createContributionTable(processedData);
-      });
-
-      var preProcess = function(data) {
         console.log(data);
-        var processedData = [];
-        var sum = 0;
+        $('#myTable tbody').append('<tr class="child"><td>blahblah</td></tr>');
+          // var processedData = preProcess(data);
 
-        for(var i = 0; i < data.length; i++) {
-          sum += data[i].total;
-        }
+          // createCommitHistoryTable(processedData);
 
-        for(var i = data.length - 1; i >= 0; i--) {
-          var total = data[i].total;
-          var author = data[i].author.login;
-          var image_url = data[i].author.avatar_url;
-          var contribution = {};
 
-          if(i > data.length - 11) {
-            contribution["total"] = total;
-            contribution["image_url"] = image_url;
-            contribution["author"] = author;
-            contribution["weightage"] = (total / sum * 100).toFixed(2);
+          $('.spinner').css('display', 'none');
+        });
 
-            processedData.push(contribution);
-          } else if(i == data.length - 11) {
-            contribution["total"] = total;
-            contribution["image_url"] = image_url;
-            contribution["author"] = "others";
-            contribution["weightage"] = total;
+    });
 
-            processedData.push(contribution);
-          } else {
-            processedData[processedData.length - 1].total += total;
-            processedData[processedData.length - 1].weightage += total;
-          }
-        }
+var preProcess = function(data) {
+  console.log(data);
+  var processedData = {};
 
-        processedData[processedData.length - 1].weightage = (processedData[processedData.length - 1].total / sum * 100).toFixed(2); 
+  for(var i = data.length - 1; i >= 0; i--) {
+    var dateTime = data[i].commit_date;
+    dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
+    var date = dateTime[0];
+    var time = dateTime[1];
+    var message = data[i].commit_message;
+    var image_url = data[i].author_avatar_url;
 
-        return processedData;
-      }
+    var commit = {};
+    commit["time"] = time;
+    commit["message"] = message;
+    commit["image_url"] = image_url;
 
-      var createContributionTable = function(data) {
-        console.log(data);
+    if(processedData[date] != null) {
+      processedData[date].push(commit);
+    } else {
+      var newDate = [commit];
+      processedData[date] = newDate;
+    }
+  }
+  return processedData;
+}
+</script>
 
-        document.body.innerHTML += '<table id="contributionTable" cellpadding="10px">'.concat('</table>');
-        var table = document.getElementById("contributionTable");
-        var header = table.createTHead();
-        var headerRow = header.insertRow(0);
-        var headerCell1 = headerRow.insertCell(0);
-        var headerCell2 = headerRow.insertCell(1);
-        var headerCell3 = headerRow.insertCell(2);
-        headerCell1.innerHTML = "Authors";
-        headerCell2.innerHTML = "Rows";
-        headerCell3.innerHTML = "Weightages (%)";
-        var body = table.createTBody();
-
-        for (var i = 0; i < data.length; i++) {
-          var total = data[i].total;
-          var image_url = data[i].image_url;
-          var author = data[i].author;
-          var weightage = data[i].weightage;
-          var row = body.insertRow(i);
-          var dataCell1 = row.insertCell(0);
-          var dataCell2 = row.insertCell(1);
-          var dataCell3 = row.insertCell(2);
-
-          dataCell1.innerHTML = "<span>".concat(author).concat("</span>");
-          dataCell2.innerHTML = "<span>".concat(total).concat("</span>");
-          dataCell3.innerHTML = "<span>".concat(weightage).concat("</span>");
-        }
-      }
-  </script>
-
-  </body>
+</body>
 </html>

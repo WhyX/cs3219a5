@@ -37,12 +37,12 @@
             All fields are optional. Enter in a specific field to narrow your search.
           </div>
 
-        <div style="display: flex;justify-content: center;  margin-bottom:30px;">
-          <select id="my-select" name="my-select" style="font-family:Ubuntu;">
+          <div style="display: flex;justify-content: center;  margin-bottom:30px;">
+            <select id="my-select" name="my-select" style="font-family:Ubuntu;">
               <option value="" disabled selected>Select a user</option>
               <option value="all">All</option>
-          </select>
-        </div>
+            </select>
+          </div>
 
           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
             <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="file-inputbar" >
@@ -74,107 +74,98 @@
       <div id="commitHistory" style="height: auto; width: 100%"></div>
 
       <script type="text/javascript">
-      var val = window.location.search;
-      $('.nav').find('a').each(function() {
-        var $this = $(this);
-        var _href = $this.attr("href");
-        $this.attr("href", _href + val);
-      });
+        var val = window.location.search;
+        $('.nav').find('a').each(function() {
+          var $this = $(this);
+          var _href = $this.attr("href");
+          $this.attr("href", _href + val);
+        });
       </script>
 
       <script>
-      var start = new Date(2000, 1, 1).toLocaleDateString() + 'T00:00:00Z';
-      var end = new Date().toLocaleDateString() + 'T00:00:00Z';
-      $( "#datepicker-8" ).datepicker({
-       prevText:"click for previous months",
-       nextText:"click for next months",
-       showOtherMonths:true,
-       selectOtherMonths: false,
-       dateFormat: "yy/mm/dd",
-       onSelect: function(date) {
-        start = date + 'T00:00:00Z';
-      }
+        var start = new Date(2000, 1, 1).toLocaleDateString() + 'T00:00:00Z';
+        var end = new Date().toLocaleDateString() + 'T00:00:00Z';
+        $( "#datepicker-8" ).datepicker({
+         prevText:"click for previous months",
+         nextText:"click for next months",
+         showOtherMonths:true,
+         selectOtherMonths: false,
+         dateFormat: "yy/mm/dd",
+         onSelect: function(date) {
+          start = date + 'T00:00:00Z';
+        }
+      });
+        $( "#datepicker-9" ).datepicker({
+         prevText:"click for previous months",
+         nextText:"click for next months",
+         showOtherMonths:true,
+         selectOtherMonths: true,
+         dateFormat: "yy/mm/dd",
+         onSelect: function(date) {
+          end = date + 'T00:00:00Z';
+        }
     });
-      $( "#datepicker-9" ).datepicker({
-       prevText:"click for previous months",
-       nextText:"click for next months",
-       showOtherMonths:true,
-       selectOtherMonths: true,
-      dateFormat: "yy/mm/dd",
-      onSelect: function(date) {
-        end = date + 'T00:00:00Z';
+
+      var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
+      var user = '';
+      var repo = '';
+      if (val) {
+        var x = val[1];
+        var div = x.indexOf('/');
+        user = x.substring(0, div);
+        repo = x.substring(div + 1);
       }
-    });
+      var emailArr = window.location.search.match(/email=([^&]*)/);
+      var email;
+      if (emailArr) {
+        email = emailArr[1];
+      }
 
- var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
-        var user = '';
-        var repo = '';
-        if (val) {
-          var x = val[1];
-          var div = x.indexOf('/');
-          user = x.substring(0, div);
-          repo = x.substring(div + 1);
-        }
-        var emailArr = window.location.search.match(/email=([^&]*)/);
-        var email;
-        if (emailArr) {
-          email = emailArr[1];
-        }
+      var memberUrl = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner='+ user+'&repo='+ repo+'&email='+ email;
+      var retrievedData;
 
-
-          var memberUrl = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/contributors?owner='+ user+'&repo='+ repo+'&email='+ email;
-          var retrievedData;
-  
-          $.get(memberUrl, function(data, status) {
-            console.log(data);
-            retrievedData = data;
-            for(var i = 0;i < data.length; i++){
-             $('#my-select').append($('<option>', { 
-                    value: data[i].author_name,
-                    text : data[i].author_name
-                }));
-             console.log($('#my-select').html());
-            }
-          });
-
-
-        var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
-        var user = '';
-        var repo = '';
-        if (val) {
-          var x = val[1];
-          var div = x.indexOf('/');
-          user = x.substring(0, div);
-          repo = x.substring(div + 1);
-        }
-        var emailArr = window.location.search.match(/email=([^&]*)/);
-        var email;
-        if (emailArr) {
-          email = emailArr[1];
-        }
-   
+      $.get(memberUrl, function(data, status) {
+        console.log(data);
+        retrievedData = data;
+        for(var i = 0;i < data.length; i++){
+         $('#my-select').append($('<option>', { 
+          value: data[i].author_name,
+          text : data[i].author_name
+        }));
+         console.log($('#my-select').html());
+       }
+     });
 
       // append start, end; keep 00:00 
-      var url;
       $('#submit-btn').on('click', function (){
+        var url;
         var author = $('select#my-select').val();
         var file = $('#file-inputbar').val();
         var linenumber = $('#linenumber-inputbar').val();
-      url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end+'&file='+file+'&email='+email+'&linenumber='+linenumber;
-      var commits = [];
-            $('.spinner').css('display', 'flex');
 
+        // url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end+'T00:00:06.573Z'+'&file='+file+'&email='+email+'&linenumber='+linenumber;
 
-      $.get(url, function(data, status) {
-        console.log(data);
-        var processedData = preProcess(data);
+        if(author != null) {
+          url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end;
+        } else if(file != null) {
+          console.log("no file");
+        } else {
+          console.log("not indicated");
+          return;
+        }
+        $('.spinner').css('display', 'flex');
 
-        createCommitHistoryTable(processedData);
-        $('.spinner').css('display', 'none');
+        console.log(url);
+        $.get(url, function(data, status) {
+          console.log(data);
+          var processedData = preProcess(data);
+
+          createCommitHistoryTable(processedData);
+          $('.spinner').css('display', 'none');
+        });
+
       });
 
-      });
-     
       var preProcess = function(data) {
         console.log(data);
         var processedData = {};
@@ -201,7 +192,7 @@
         }
         return processedData;
       }
-      </script>
+    </script>
 
     </body>
     </html>
