@@ -86,8 +86,20 @@
           padding: 10px 0px 10px 20px;
         }
 
+        .oldChangesCell {
+          display: inline-block;
+          width: 45%;
+        }
+        
+        .newChangesCell {
+          margin-left: 10px;
+          display: inline-block;
+          width: 45%;
+          vertical-align: top;
+        }
+
         .codeDisplay {
-          width: 80%;
+          width: 90%;
           font-size: 12px;
           padding: 5px 0px 5px 5px;
         }
@@ -312,14 +324,14 @@
               var row3 = table.insertRow(rowIndex);
               var dataCell3 = row3.insertCell(0);
 
-              dataCell3.innerHTML = "<div style='padding:10px'>Old Changes: </div><div class='changesCell' style='background:#FF8A80'>".concat(oldChangesStr).concat("</div>");
+              dataCell3.innerHTML = "<div class='oldChangesCell'><div style='padding:10px'>Old Changes: </div><div class='changesCell' style='background:#FF8A80'>".concat(oldChangesStr).concat("</div></div><div class='newChangesCell'>").concat("<div style='padding:10px'>New Changes: </div><div class='changesCell' style='background: #00E676'>").concat(newChangesStr).concat("</div></div>");
               rowIndex++;
 
-              var row4 = table.insertRow(rowIndex);
-              var dataCell4 = row4.insertCell(0);
+              // var row4 = table.insertRow(rowIndex);
+              // var dataCell4 = row4.insertCell(0);
 
-              dataCell4.innerHTML = "<div style='padding:10px'>New Changes: </div><div class='changesCell' style='background: #00E676'>".concat(newChangesStr).concat("</div>");
-              rowIndex++;
+              // dataCell4.innerHTML = "<div style='padding:10px'>New Changes: </div><div class='changesCell' style='background: #00E676'>".concat(newChangesStr).concat("</div>");
+              // rowIndex++;
             }
   }
         }
