@@ -7,10 +7,9 @@
   <meta name="description" content="{{seo.commithistory.description}}">
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="assets/css/commitHistory.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="assets/js/commitHistory.js"></script>
   <script src="assets/js/jquery.color-2.1.2.min.js"></script>
+  <script src="assets/js/commitHistory.js"></script>
   <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
   <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -20,6 +19,76 @@
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
       <![endif]-->
+      <style>
+        span {
+          display: inline-block;
+          vertical-align: middle;
+          line-height: normal;
+        }
+
+        .header {
+          padding-left: 20px;
+        }
+
+        img {
+          height: 30px;
+          margin-left: 10px;
+          display: inline-block;
+          padding: 5px 8px 5px 8px;
+          -moz-border-radius: 50%;
+          -webkit-border-radius: 50%;
+          border-radius: 50%;
+        }
+
+        .dateCell {
+          height: 30px;
+          display: inline-block;
+          font-size: 15px;
+          line-height: 30px;
+          padding: 5px 8px 5px 8px;
+          color: white;
+        }
+
+        .timelineCell {
+          width: 3px;
+          height: 50px;
+          display: inline-block;
+          margin-right: 7px;
+        }
+
+        .timeCell {
+          display: inline-block;
+          margin-left: 5px;
+          vertical-align: top;
+          text-align: center;
+          line-height: 50px;
+          overflow: hidden;
+          padding: 0px 10px 10px 10px;
+        }
+
+        .nameCell {
+          display: inline-block;
+          margin-left: 15px;
+          vertical-align: top;
+          line-height: 50px;
+          overflow: hidden;
+        }
+
+        .messageCell {
+          display: inline-block;
+          width: 90%;
+          margin-left: 10px;
+          vertical-align: top;
+          line-height: 50px;
+          overflow: hidden;
+          word-wrap: break-word;
+        }
+
+        .changesCell {
+          margin: 0px 0px 5px 10px;
+          padding: 10px 0px 10px 20px;
+        }
+      </style>
     </head>
 
     <body class="{{seo.commithistory.body_class}}">
@@ -37,12 +106,9 @@
             All fields are required.
           </div>
 
-
-
           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
             <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="file-inputbar" >
           </div>
-
 
           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
             <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="Line Number Range(Ex.1-10)" aria-describedby="basic-addon1" id="linenumber-inputbar" >
@@ -61,73 +127,60 @@
         <p>Loading...</p>
       </div>
 
-      <table id="myTable">
-        <tbody>
-          <tr>
-            <td>
-              test
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
       <div id="commitHistory" style="height: auto; width: 100%"></div>
 
       <script type="text/javascript">
-      var val = window.location.search;
-      $('.nav').find('a').each(function() {
-        var $this = $(this);
-        var _href = $this.attr("href");
-        $this.attr("href", _href + val);
-      });
+        var val = window.location.search;
+        $('.nav').find('a').each(function() {
+          var $this = $(this);
+          var _href = $this.attr("href");
+          $this.attr("href", _href + val);
+        });
       </script>
 
       <script>
-      var start = new Date(2000, 1, 1).toLocaleDateString() + 'T00:00:00Z';
-      var end = new Date().toLocaleDateString() + 'T00:00:00Z';
-      $( "#datepicker-8" ).datepicker({
-       prevText:"click for previous months",
-       nextText:"click for next months",
-       showOtherMonths:true,
-       selectOtherMonths: false,
-       dateFormat: "yy/mm/dd",
-       onSelect: function(date) {
-        start = date + 'T00:00:00Z';
-      }
-    });
-      $( "#datepicker-9" ).datepicker({
-       prevText:"click for previous months",
-       nextText:"click for next months",
-       showOtherMonths:true,
-       selectOtherMonths: true,
-       dateFormat: "yy/mm/dd",
-       onSelect: function(date) {
-        end = date + 'T00:00:00Z';
-      }
-    });
+        var start = new Date(2000, 1, 1).toLocaleDateString() + 'T00:00:00Z';
+        var end = new Date().toLocaleDateString() + 'T00:00:00Z';
+        $( "#datepicker-8" ).datepicker({
+         prevText:"click for previous months",
+         nextText:"click for next months",
+         showOtherMonths:true,
+         selectOtherMonths: false,
+         dateFormat: "yy/mm/dd",
+         onSelect: function(date) {
+          start = date + 'T00:00:00Z';
+        }
+      });
+        $( "#datepicker-9" ).datepicker({
+         prevText:"click for previous months",
+         nextText:"click for next months",
+         showOtherMonths:true,
+         selectOtherMonths: true,
+         dateFormat: "yy/mm/dd",
+         onSelect: function(date) {
+          end = date + 'T00:00:00Z';
+        }
+      });
 
-      var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
-      var user = '';
-      var repo = '';
-      if (val) {
-        var x = val[1];
-        var div = x.indexOf('/');
-        user = x.substring(0, div);
-        repo = x.substring(div + 1);
-      }
-      var emailArr = window.location.search.match(/email=([^&]*)/);
-      var email;
-      if (emailArr) {
-        email = emailArr[1];
-      }
+        var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
+        var user = '';
+        var repo = '';
+        if (val) {
+          var x = val[1];
+          var div = x.indexOf('/');
+          user = x.substring(0, div);
+          repo = x.substring(div + 1);
+        }
+        var emailArr = window.location.search.match(/email=([^&]*)/);
+        var email;
+        if (emailArr) {
+          email = emailArr[1];
+        }
 
-
-
-      // append start, end; keep 00:00 
-      $('#submit-btn').on('click', function (){
-        var url;
-        var file = $('#file-inputbar').val();
-        var linenumber = $('#linenumber-inputbar').val().split('-');
+        $('#submit-btn').on('click', function (){
+          var url;
+          var file = $('#file-inputbar').val();
+          var linenumber = $('#linenumber-inputbar').val().split('-');
 
 
         // url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end+'T00:00:06.573Z'+'&file='+file+'&email='+email+'&linenumber='+linenumber;
@@ -146,43 +199,129 @@
       $.get(url, function(data, status) {
         console.log(data);
         $('#myTable tbody').append('<tr class="child"><td>blahblah</td></tr>');
-          // var processedData = preProcess(data);
+        var processedData = preProcess(data);
 
-          // createCommitHistoryTable(processedData);
+        createHistoryTable(processedData);
 
-
-          $('.spinner').css('display', 'none');
-        });
+        $('.spinner').css('display', 'none');
+      });
 
     });
 
-var preProcess = function(data) {
-  console.log(data);
-  var processedData = {};
+        var preProcess = function(data) {
+          console.log(data);
+          var processedData = {};
 
-  for(var i = data.length - 1; i >= 0; i--) {
-    var dateTime = data[i].commit_date;
-    dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
-    var date = dateTime[0];
-    var time = dateTime[1];
-    var message = data[i].commit_message;
-    var image_url = data[i].author_avatar_url;
+          for(var i = data.length - 1; i >= 0; i--) {
+            var dateTime = data[i].commit_date;
+            dateTime = dateTime.substring(0, dateTime.length - 1).split("T");
+            var date = dateTime[0];
+            var time = dateTime[1];
+            var message = data[i].commit_message;
+            var image_url = data[i].author_avatar_url;
+            var author_name = data[i].author_name;
+            var oldChanges = data[i].changes[0].oldChanges;
+            var newChanges = data[i].changes[0].newChanges;
 
-    var commit = {};
-    commit["time"] = time;
-    commit["message"] = message;
-    commit["image_url"] = image_url;
+            var commit = {};
+            commit["time"] = time;
+            commit["message"] = message;
+            commit["image_url"] = image_url;
+            commit["author_name"] = author_name;
 
-    if(processedData[date] != null) {
-      processedData[date].push(commit);
-    } else {
-      var newDate = [commit];
-      processedData[date] = newDate;
-    }
+            var oldChangesStr, newChangesStr;
+
+            if(oldChanges["1"] != null) {
+              oldChangesStr = oldChanges["1"];
+              Object.keys(oldChanges).forEach(function(key) {
+                if(key != "1") {
+                  oldChangesStr = oldChangesStr.concat("<br>").concat(oldChanges[key])
+                }
+              });
+            } else {
+              oldChangesStr = "None";
+            }
+
+            if(newChanges["1"] != null) {
+              newChangesStr = newChanges["1"];
+              Object.keys(newChanges).forEach(function(key) {
+                if(key != "1") {
+                  newChangesStr = newChangesStr.concat("<br>").concat(newChanges[key])
+                }
+              });
+            } else {
+              newChangesStr = "None";
+            }
+
+            console.log(oldChangesStr);
+            console.log(newChangesStr);
+
+            commit["oldChangesStr"] = oldChangesStr;
+            commit["newChangesStr"] = newChangesStr;
+
+            if(processedData[date] != null) {
+              processedData[date].push(commit);
+            } else {
+              var newDate = [commit];
+              processedData[date] = newDate;
+            }
+          }
+          return processedData;
+        }
+
+        var createHistoryTable = function(data) {
+          console.log(data);
+
+          var keys = Object.keys(data), dataLen = keys.length;
+          document.getElementById("commitHistory").innerHTML = '<table id="commitHistoryTable">'.concat('</table>');
+          var table = document.getElementById("commitHistoryTable");
+          var rowIndex = 0;
+
+          for (var i = dataLen - 1; i >= 0; i --) {
+            var date = keys[i];
+            var commits = data[date];
+            var headerRow = table.insertRow(rowIndex);
+            var headerCell = headerRow.insertCell(0);
+            var randomColor = randomColorGenerator();
+
+            headerCell.innerHTML = "<div class='dateCell' style='background:".concat(randomColor).concat("'><span>").concat(date).concat("</span></div>");
+            rowIndex++;
+
+            for(var j = 0; j < commits.length; j++) {
+              var time = commits[j].time;
+              var message = commits[j].message;
+              var image_url = commits[j].image_url;
+              var author_name = commits[j].author_name;
+              var oldChangesStr = commits[j].oldChangesStr;
+              var newChangesStr = commits[j].newChangesStr;
+
+              var row = table.insertRow(rowIndex);
+              var dataCell = row.insertCell(0);
+
+              dataCell.innerHTML = "<div class='timelineCell' style='background:".concat(randomColor).concat("'></div><div class='timeCell'><span>").concat(time).concat("</span><div class='nameCell'><span>Author: ").concat(author_name).concat("</span></div>").concat("<img src='").concat(image_url).concat("'>");
+              rowIndex++;
+
+              var row2 = table.insertRow(rowIndex);
+              var dataCell2 = row2.insertCell(0);
+
+              dataCell2.innerHTML = "<div class='timelineCell' style='background:".concat(randomColor).concat("'></div><div class='messageCell'><span>").concat(message).concat("</span></div>");
+              rowIndex++;
+
+              var row3 = table.insertRow(rowIndex);
+              var dataCell3 = row3.insertCell(0);
+
+              dataCell3.innerHTML = "<div style='padding:5px'>Old Changes: </div><div class='changesCell' style='background:#FF8A80'><span>".concat(oldChangesStr).concat("</span></div>");
+              rowIndex++;
+
+              var row4 = table.insertRow(rowIndex);
+              var dataCell4 = row4.insertCell(0);
+
+              dataCell4.innerHTML = "<div style='padding:5px'>New Changes: </div><div class='changesCell' style='background: #00E676'><span>".concat(newChangesStr).concat("</span></div>");
+              rowIndex++;
+            }
   }
-  return processedData;
-}
-</script>
+        }
+      </script>
 
-</body>
-</html>
+    </body>
+    </html>
