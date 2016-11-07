@@ -21,6 +21,7 @@
   opacity: 0;
 }
 </style>
+  
   <!-- Javascript -->
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -72,12 +73,23 @@
             <input type="text" style="margin-bottom:30px;font-family:Ubuntu;" placeholder="Enter Start Date (optional)" id="datepicker-8">
             <input type="text" style="font-family:Ubuntu;" placeholder="Enter End Date (optional)" id="datepicker-9">
           </div>
+<!--           <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="file-inputbar" >
+          </div> -->
+
 
           <div style="display:flex;justify-content: center;">
            <button id="submit-btn" type="button" class="btn btn-primary" style="font-family:Ubuntu;display:flex;justify-content: center;margin-bottom: 10px;text-transform: uppercase;">
             Submit
           </button>
         </div>
+      </div>
+
+      <div class="alert alert-warning alert-dismissible fade in" role="alert" style="display: none;margin-top:20px">
+        <button type="button" class="close" data-hide="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>No commit history found for this author.</strong>
       </div>
 
       <div class="spinner" style="display:none;flex-direction:column;justify-content:center;align-items:center;margin-top:50px">
@@ -154,6 +166,11 @@
        }
      });
 
+      $(function(){
+            $("[data-hide]").on("click", function(){
+                $("." + $(this).attr("data-hide")).hide();
+            });
+        });
       // append start, end; keep 00:00 
       $('#submit-btn').on('click', function (){
         var url;
