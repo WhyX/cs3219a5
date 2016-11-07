@@ -11,11 +11,20 @@ function randomColorGenerator() {
 
 function createCommitHistoryTable(data) {
   console.log(data);
+  $(".alert").hide();
 
   var keys = Object.keys(data), dataLen = keys.length;
   document.getElementById("commitHistory").innerHTML = '<table id="commitHistoryTable">'.concat('</table>');
   var table = document.getElementById("commitHistoryTable");
   var rowIndex = 0;
+
+  if($.isEmptyObject(data)) {
+    console.log("found empty");
+    $(".alert").show();
+    return;
+  }
+
+  console.log("found something");
 
   for (var i = dataLen - 1; i >= 0; i --) {
     var date = keys[i];
