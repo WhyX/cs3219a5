@@ -34,15 +34,17 @@ span {
   display: inline-block;
   vertical-align: top;
   text-align: center;
-  line-height: 40px;
+  line-height: 50px;
   overflow: hidden;
   padding: 0px 7px 0px 7px;
 }
 
 .messageCell {
   display: inline-block;
+  width: 90%;
   margin-left: 10px;
   vertical-align: top;
-  line-height: 40px;
+  line-height: 50px;
   overflow: hidden;
+  word-wrap: break-word;
 }
