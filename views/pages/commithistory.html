@@ -13,8 +13,14 @@
   <script src="assets/js/jquery.color-2.1.2.min.js"></script>
   <link rel="stylesheet" href="assets/css/font-awesome/css/font-awesome.min.css">
   <link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<style type="text/css">
+.modal-backdrop, .modal-backdrop.fade.in {
+  opacity: 0;
+}
+</style>
   <!-- Javascript -->
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -28,34 +34,43 @@
 
         {{> head }}
 
+            <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+      </div>
+      <div class="modal-body">
+        Please select an author!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
         <div class="placeholder">
           {{> commithistory }}
         </div>
 
         <div>
           <div class="input-group" style="font-family:Ubuntu;display:flex;justify-content: center; margin-bottom:30px;">
-            All fields are optional. Enter in a specific field to narrow your search.
+            Please select a user. Choose a start and end date to narrow your search.
           </div>
 
           <div style="display: flex;justify-content: center;  margin-bottom:30px;">
             <select id="my-select" name="my-select" style="font-family:Ubuntu;">
-              <option value="" disabled selected>Select a user</option>
-              <option value="all">All</option>
+              <option value="" disabled selected>Select a user (required)</option>
             </select>
           </div>
 
-          <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="File" aria-describedby="basic-addon1" id="file-inputbar" >
-          </div>
 
           <div style="display:flex;justify-content: center; flex-direction:column; align-items:center;margin-bottom:30px;">
-            <input type="text" style="margin-bottom:30px;font-family:Ubuntu;" placeholder="Enter Start Date" id="datepicker-8">
-            <input type="text" style="font-family:Ubuntu;" placeholder="Enter End Date" id="datepicker-9">
-          </div>
-
-
-          <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-            <input type="text" class="form-control" style="font-family:Ubuntu;" placeholder="Line Number Range(Ex.1-10)" aria-describedby="basic-addon1" id="linenumber-inputbar" >
+            <input type="text" style="margin-bottom:30px;font-family:Ubuntu;" placeholder="Enter Start Date (optional)" id="datepicker-8">
+            <input type="text" style="font-family:Ubuntu;" placeholder="Enter End Date (optional)" id="datepicker-9">
           </div>
 
           <div style="display:flex;justify-content: center;">
@@ -72,6 +87,9 @@
       </div>
 
       <div id="commitHistory" style="height: auto; width: 100%"></div>
+
+
+
 
       <script type="text/javascript">
         var val = window.location.search;
@@ -147,10 +165,9 @@
 
         if(author != null) {
           url= 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/member/commits?owner='+ user+'&repo='+repo+'&author='+author+'&start='+start+'&end='+end;
-        } else if(file != null) {
-          console.log("no file");
         } else {
           console.log("not indicated");
+          $("#myModal").modal();
           return;
         }
         $('.spinner').css('display', 'flex');

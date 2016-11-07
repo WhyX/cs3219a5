@@ -10,7 +10,11 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-
+<style type="text/css">
+.modal-backdrop, .modal-backdrop.fade.in {
+  opacity: 0;
+}
+</style>
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
@@ -27,6 +31,25 @@
         <h1>Subscribe</h1>
       </div>
 
+
+    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+      </div>
+      <div class="modal-body">
+        Please enter a valid email address!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
        <script type="text/javascript">
         var val = window.location.search;
         $('.nav').find('a').each(function() {
@@ -38,12 +61,20 @@
       </script>
 
       <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;margin-top:100px">
-        <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;">
-        <button id="submit-btn" type="button" class="btn btn-primary" style="margin-bottom: 10px;text-transform: uppercase;">
+        <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1" id="user-inputbar" style="margin-right: 10px;font-family:Ubuntu">
+        <button id="submit-btn" type="button" class="btn btn-primary" style="margin-bottom: 10px;text-transform: uppercase;font-family:Ubuntu">
         Submit
         </button>
       </div>
 
+      <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+        
+        <button id="demo-btn" type="button" class="btn btn-primary" style="margin-bottom: 10px;text-transform: uppercase;font-family:Ubuntu">
+        Demo Button
+        </button>
+      </div>
+
+  
       <div class="alert alert-success alert-dismissible fade in" role="alert" style="display: none">
         <button type="button" class="close" data-hide="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -68,18 +99,42 @@
             console.log(div);
             repo = x.substring(div + 7);
           }
-          var val = '?email='+ $('#user-inputbar').val() +  "&repo=" + repo;
-          var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/subscription/create' + val;
 
-          console.log($('#user-inputbar').val());
-          console.log(url);
-          $.get(url, function(data, status, xhr) {
+          var val; 
+          var emailInput= $('#user-inputbar').val();
+
+          if(validateEmail(emailInput)) {
+            val = '?email='+ emailInput  +  "&repo=" + repo;
+
+            var url = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/subscription/create' + val;
+
+            console.log($('#user-inputbar').val());
+            console.log(url);
+            $.get(url, function(data, status, xhr) {
+              console.log(data);
+              $(".alert").find('strong').text(data.message);
+              $(".alert").find('#emailLabel').text($('#user-inputbar').val());
+              $(".alert").show();
+            });
+          }
+          else {
+            $("#myModal").modal();
+          }
+        });
+
+        $('#demo-btn').on('click', function() {
+          var link = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/notification/invoke?token=Ek2wwa6vCCJ1AbuPxtbC';
+          $.get(link, function(data) {
             console.log(data);
-            $(".alert").find('strong').text(data.message);
-            $(".alert").find('#emailLabel').text($('#user-inputbar').val());
-            $(".alert").show();
+            console.log('demo clicked');
           });
         });
+
+        function validateEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+
 
         // jQuery["postJSON"] = function( url, data, callback ) {
         //     // shift arguments if data argument was omitted

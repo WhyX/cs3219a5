@@ -8,6 +8,7 @@
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 
 </head>
@@ -18,13 +19,56 @@
 
     {{> home }}
 
-    <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;margin-top:100px;">
-      <input type="text" class="form-control" placeholder="Email" aria-describedby="basic-addon1" id="email-inputbar" style="margin-right: 10px; font-family:Ubuntu">
+    <!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+      </div>
+      <div class="modal-body">
+        Please enter a valid email address!
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Modal -->
+<div class="modal fade" id="myGithub" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+      </div>
+      <div class="modal-body">
+        Please enter a github url.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+     <div class="submitdone"  style="display:flex;justify-content: center;margin-bottom:30px;">
+      Enter your email below so that we will notify you when you are away for long! This is different from the subscribe tab.
+    </div>
+
+    <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
+      <input type="text" class="form-control" placeholder="Email (optional)" aria-describedby="basic-addon1" id="email-inputbar" style="margin-right: 10px; font-family:Ubuntu">
       
     </div>
 
     <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
-      <input type="text" class="form-control" placeholder="Github Repo URL" aria-describedby="basic-addon1" id="github-inputbar" style="margin-right: 10px; font-family:Ubuntu">
+      <input type="text" class="form-control" placeholder="Github Repo URL (required)" aria-describedby="basic-addon1" id="github-inputbar" style="margin-right: 10px; font-family:Ubuntu">
     </div>
 
     <div class="input-group" style="display:flex;justify-content: center; margin-bottom:30px;">
@@ -91,9 +135,30 @@
       } 
     });
 
+
+        function validateEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(email);
+        }
+
+
+
   $('#submit-btn-email').on('click', function() {
     var email =  $('#email-inputbar').val();
     var github =  $('#github-inputbar').val();
+     if(!github) {
+        $('#myGithub').modal();
+        return;
+    }
+
+    if (email) {
+      if(!validateEmail(email)) {
+        $('#myModal').modal();
+        return;
+      }
+    }
+
+  
     var val = '?email='+email +  "&github=" + github;
     window.location.search = val;
         $('.submitdone').css('display', 'flex');
