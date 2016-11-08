@@ -8,7 +8,7 @@
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/css/style.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 
 
 </head>
@@ -20,45 +20,84 @@
     {{> home }}
 
     <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
-      </div>
-      <div class="modal-body">
-        Please enter a valid email address!
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+          </div>
+          <div class="modal-body">
+            Please enter a valid email address!
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 
     <!-- Modal -->
-<div class="modal fade" id="myGithub" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
-      </div>
-      <div class="modal-body">
-        Please enter a github url.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+    <div class="modal fade" id="myGithub" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+          </div>
+          <div class="modal-body">
+            Please enter a github url.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="myGithubError" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+          </div>
+          <div class="modal-body">
+            Please enter a existing github url.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myGithubSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+          </div>
+          <div class="modal-body">
+            Please enter a existing github url.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 
-     <div class="submitdone"  style="display:flex;justify-content: center;margin-bottom:30px;">
+
+
+    <div class="submitdone"  style="display:flex;justify-content: center;margin-bottom:30px;">
       Enter your email below so that we will notify you when you are away for long! This is different from the subscribe tab.
     </div>
 
@@ -81,7 +120,7 @@
     <div class="submitdone"  style="display:flex;justify-content: center; margin-bottom:30px;">
       Please select the following tabs when you have clicked Submit to check out the repo!
     </div>
-     <div class="submitdone"  style="display:flex;justify-content: center; margin-bottom:30px;">
+    <div class="submitdone"  style="display:flex;justify-content: center; margin-bottom:30px;">
       Links are disabled if an invalid github url is entered.
     </div>
 
@@ -110,7 +149,7 @@
     console.log($this.attr("href"));
   });
 
-    var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
+  var val = window.location.search.match(/github=https?:\/\/github.com\/([^&]*)/);
   var user = '';
   var repo = '';
   if (val) {
@@ -126,29 +165,29 @@
   }
 
   $('.nav').find('a').each(function() {
-          var $this = $(this);
+    var $this = $(this);
 
-      if(val ) {
+    if(val ) {
          // $this.click(true);
          $this.off('click.myDisable');
-        $this.css('color', 'rgba(0, 0, 0, 1)');
-      } 
-    });
+         $this.css('color', 'rgba(0, 0, 0, 1)');
+       } 
+     });
 
 
-        function validateEmail(email) {
-            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            return re.test(email);
-        }
+  function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
 
 
-
+  var git;  
   $('#submit-btn-email').on('click', function() {
     var email =  $('#email-inputbar').val();
     var github =  $('#github-inputbar').val();
-     if(!github) {
-        $('#myGithub').modal();
-        return;
+    if(!github) {
+      $('#myGithub').modal();
+      return;
     }
 
     if (email) {
@@ -158,10 +197,37 @@
       }
     }
 
-  
+    
     var val = '?email='+email +  "&github=" + github;
-    window.location.search = val;
-        $('.submitdone').css('display', 'flex');
+    git = github.match(/https?:\/\/github.com\/([^&]*)/);
+    if(!git) {
+      $('#myGithubError').modal();
+    }
+    console.log(git);
+    $.get('https://api.github.com/repos/' + git[1], function(data, error) {
+      console.log(data);
+      window.location.search = val;
+
+      $('#myGithubSuccess').modal();
+    }).fail(function() {
+
+      $('#myGithubError').modal();
+
+
+      $('.nav').find('a').each(function() {
+        var $this = $(this);
+        var _href = $this.attr("href");
+        $this.attr("href", _href + val);
+        $this.on('click.myDisable', function(e) { e.preventDefault(); });
+
+        $this.css('color', 'rgba(0, 0, 0, 0.5)');
+        console.log($this.attr("href"));
+      });
+
+      
+      return;
+    });
+    $('.submitdone').css('display', 'flex');
 
     $('.nav').find('a').each(function() {
       var $this = $(this);
@@ -169,11 +235,12 @@
       if( github) {
          // $this.click(true);
          $('a').off('click.myDisable');
-        $this.css('color', 'rgba(0, 0, 0, 1)');
-      } 
-      $this.attr("href", _href + val);
-      console.log($this.attr("href"));
-    });
+         $this.css('color', 'rgba(0, 0, 0, 1)');
+       } 
+       $this.attr("href", _href + val);
+       console.log($this.attr("href"));
+
+     });
   });
-  </script>
-  </html>
+</script>
+</html>

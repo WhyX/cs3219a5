@@ -128,7 +128,6 @@
 
         $('#demo-btn').on('click', function() {
           var link = 'http://ec2-54-179-159-147.ap-southeast-1.compute.amazonaws.com:3000/api/notification/invoke?token=Ek2wwa6vCCJ1AbuPxtbC';
-            console.log('demo clicked');
           $.get(link, function(data) {
             console.log(data);
           });
