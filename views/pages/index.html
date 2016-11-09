@@ -66,7 +66,7 @@
             <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
           </div>
           <div class="modal-body">
-            Please enter a existing github url.
+            Please enter a valid github url.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -81,10 +81,10 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Something has occured</h4>
+            <h4 class="modal-title" id="myModalLabel">Yay</h4>
           </div>
           <div class="modal-body">
-            Please enter a existing github url.
+            Click on the tabs below to continue.
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -128,7 +128,6 @@
 
     {{> head }}
 
-    {{> footer }}
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </body>
@@ -197,7 +196,7 @@
       }
     }
 
-    
+
     var val = '?email='+email +  "&github=" + github;
     git = github.match(/https?:\/\/github.com\/([^&]*)/);
     if(!git) {
@@ -224,7 +223,7 @@
         console.log($this.attr("href"));
       });
 
-      
+
       return;
     });
     $('.submitdone').css('display', 'flex');
